@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.6.2"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.spring") version "1.6.10"
+    id("org.springframework.boot") version "2.6.2" //LICENSE OK
+    id("io.spring.dependency-management") version "1.0.11.RELEASE" //LICENSE OK
+    kotlin("jvm") version "1.6.10" //LICENSE OK
+    kotlin("plugin.spring") version "1.6.10" //LICENSE OK
 }
 
 group = "xyz.miyayu.yobsub"
@@ -16,11 +16,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter-web") //LICENSE OK
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin") //LICENSE OK
+    implementation("org.jetbrains.kotlin:kotlin-reflect") //LICENSE OK
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") //LICENSE OK
+    testImplementation("org.springframework.boot:spring-boot-starter-test") //LICENSE OK
 }
 
 tasks.withType<KotlinCompile> {
