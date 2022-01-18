@@ -19,7 +19,7 @@ repositories {
 val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
 val details = versionDetails()
 val versions = details.lastTag
-val implementationVersion = versions + '.' + (details.gitHash).substring(0,7)
+val implementationVersion = versions + ',' + (details.gitHash).substring(0,7)
 
 
 dependencies {
