@@ -12,12 +12,13 @@ fun main(args: Array<String>) {
     runApplication<YobSubCordApplication>(*args)
     loadEnv()
     loadDiscord()
-}
 
+}
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
     logger.info("DISCORDTOKEN:\t%s".format(EnvWrapper.DISCORD_TOKEN))
 }
 fun loadDiscord(){
     JDAWrapper.getJDA().presence.activity = Activity.playing("hoge")
+    JDAWrapper.activityStarter()
 }
