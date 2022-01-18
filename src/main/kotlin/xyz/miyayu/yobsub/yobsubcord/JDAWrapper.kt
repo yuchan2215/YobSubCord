@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 
 class JDAWrapper {
     companion object{
-        val LOGGER = LoggerFactory.getLogger(JDAWrapper::class.java)
+        val VERSION :String = YobSubCordApplication::class.java.`package`.implementationVersion?:"Dev"
         private var jda:JDA? = null
         fun getJDA():JDA{
             if(jda != null)return jda!!
