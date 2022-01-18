@@ -21,6 +21,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect") //LICENSE OK
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") //LICENSE OK
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") //LICENSE OK
+    implementation("net.dv8tion:JDA:5.0.0-alpha.4") //LICENSE OK
     testImplementation("org.springframework.boot:spring-boot-starter-test") //LICENSE OK
 }
 
