@@ -1,3 +1,9 @@
+# ENVファイルの作成
+次の内容でenvファイル(.env)を作成します。
+```dotenv
+DISCORDTOKEN= # TOKEN HERE #
+```
+
 # LICENSES
 [このプロジェクトのライセンス](LICENSE)
  - jackson-module-kotlin
