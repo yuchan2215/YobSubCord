@@ -4,6 +4,10 @@ import net.dv8tion.jda.api.entities.Activity
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import xyz.miyayu.yobsub.yobsubcord.discord.CommandWrapper
+import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
+import xyz.miyayu.yobsub.yobsubcord.discord.ReadyEvents
+import xyz.miyayu.yobsub.yobsubcord.discord.StartUp
 
 @SpringBootApplication
 class YobSubCordApplication
