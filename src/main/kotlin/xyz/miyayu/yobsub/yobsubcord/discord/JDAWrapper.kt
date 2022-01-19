@@ -1,9 +1,10 @@
-package xyz.miyayu.yobsub.yobsubcord
+package xyz.miyayu.yobsub.yobsubcord.discord
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 
 class JDAWrapper {
     companion object{
