@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 import xyz.miyayu.yobsub.yobsubcord.discord.CommandWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.ReadyEvents
-import xyz.miyayu.yobsub.yobsubcord.discord.StartUp
+import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 
 @SpringBootApplication
 class YobSubCordApplication
@@ -28,4 +28,5 @@ fun loadEnv() {
 }
 fun loadDiscord(){
     JDAWrapper.getJDA().presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
+    jda.addEventListener(Eval())
 }

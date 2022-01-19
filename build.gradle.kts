@@ -30,6 +30,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") //LICENSE OK
     implementation("net.dv8tion:JDA:5.0.0-alpha.4") //LICENSE OK
     testImplementation("org.springframework.boot:spring-boot-starter-test") //LICENSE OK
+    implementation("org.codehaus.groovy:groovy-all:3.0.9") //LICENSE OK
+
 }
 
 tasks.withType<KotlinCompile> {
