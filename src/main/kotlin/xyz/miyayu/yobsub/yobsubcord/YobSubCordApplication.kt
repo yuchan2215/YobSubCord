@@ -1,12 +1,11 @@
 package xyz.miyayu.yobsub.yobsubcord
 
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Activity
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import xyz.miyayu.yobsub.yobsubcord.discord.CommandWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
-import xyz.miyayu.yobsub.yobsubcord.discord.ReadyEvents
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 
 @SpringBootApplication
@@ -27,6 +26,8 @@ fun loadEnv() {
     logger.info("DISCORDTOKEN:\t%s".format(EnvWrapper.DISCORD_TOKEN))
 }
 fun loadDiscord(){
-    JDAWrapper.getJDA().presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
+    val jda: JDA = JDAWrapper.getJDA()
+    jda.presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
     jda.addEventListener(Eval())
+
 }
