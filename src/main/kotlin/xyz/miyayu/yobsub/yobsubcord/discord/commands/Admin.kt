@@ -31,11 +31,13 @@ class Admin :ListenerAdapter(){
         val command = CommandData("makebutton","ロールを付与・剥奪するボタンを作成します")
             .addOption(OptionType.ROLE,"workrole","付与・剥奪するロール",true)
             .addOption(OptionType.STRING,"message","ボタンの説明文",true)
+            .addOption(OptionType.BOOLEAN,"canget","付与ボタンを作成しますか？(デフォルト：はい)",false)
             .addOption(OptionType.BOOLEAN,"canremove","剥奪ボタンを作成しますか？(デフォルト：はい)",false)
             .addOption(OptionType.STRING,"gettext","付与ボタンのテキスト",false)
             .addOption(OptionType.STRING,"removetext","剥奪ボタンのテキスト",false)
             .setDefaultEnabled(false)
-        event.jda.upsertCommand(command).queue()
-        event.message.reply("コマンドの追加処理を行いました。").queue()
+        event.jda.upsertCommand(command).queue{
+            event.message.reply(it.id).queue()
+        }
     }
 }
