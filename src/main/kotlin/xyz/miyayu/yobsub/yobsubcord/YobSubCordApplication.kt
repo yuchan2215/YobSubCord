@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Admin
+import xyz.miyayu.yobsub.yobsubcord.discord.commands.Enable
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 
 @SpringBootApplication
@@ -31,4 +32,5 @@ fun loadDiscord(){
     jda.presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
     jda.addEventListener(Eval())
     jda.addEventListener(Admin())
+    jda.addEventListener(Enable())
 }
