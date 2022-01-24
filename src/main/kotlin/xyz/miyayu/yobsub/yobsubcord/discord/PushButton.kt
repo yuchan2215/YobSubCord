@@ -1,5 +1,6 @@
 package xyz.miyayu.yobsub.yobsubcord.discord
 
+import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
@@ -30,6 +31,7 @@ class PushButton:ListenerAdapter() {
             }
         }catch(e:Exception){
             event.reply("エラーが発生したためロールを付与することができませんでした。運営に報告してください。\tエラー内容：" + e.message).queue()
+            e.stackTrace
         }
     }
     fun liveAlertDm(event: ButtonClickEvent){
@@ -47,6 +49,7 @@ class PushButton:ListenerAdapter() {
             }
         }catch(e:Exception){
             event.reply("エラーが発生したためロールを付与することができませんでした。運営に報告してください。\tエラー内容：" + e.message).queue()
+            e.stackTrace
         }
     }
     fun removeRoles(event: ButtonClickEvent){
