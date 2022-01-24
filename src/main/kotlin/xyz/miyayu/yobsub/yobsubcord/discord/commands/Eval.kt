@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.YobSubCordApplication
 import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import java.lang.reflect.Modifier
@@ -14,7 +15,7 @@ import java.lang.reflect.Modifier
 class Eval : ListenerAdapter(){
     private val logger :Logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        if(event.author.id != "192924983872192512")return
+        if(event.author.id != EnvWrapper.DEBUG_USER)return
         if(!event.message.contentRaw.startsWith("tb.eval "))return
 
         val content = event.message.contentRaw

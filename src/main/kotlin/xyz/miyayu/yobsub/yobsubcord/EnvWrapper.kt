@@ -9,5 +9,12 @@ class EnvWrapper {
             ignoreIfMissing = true
         }
         val DISCORD_TOKEN: String = DOTENV.get("DISCORDTOKEN", "")
+        val ADMIN_ROLE: String = DOTENV.get("ADMINROLE","")
+        val ALERT_ROLE: String = DOTENV.get("ALERTROLE","")
+        val DM_ALERT_ROLE: String = DOTENV.get("DMALERTROLE","")
+        val ALERT_CHANNEL: String = DOTENV.get("ALERTCHANNEL","")
+        val DEBUG_USER: String = DOTENV.get("DEBUGUSER","")
+        val DEBUG_GUILD: String = DOTENV.get("DEBUGGUILD","")
+        val IS_DM_ENABLED: Boolean = DM_ALERT_ROLE !=("")
     }
 }
