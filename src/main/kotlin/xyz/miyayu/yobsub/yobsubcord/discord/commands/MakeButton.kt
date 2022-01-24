@@ -1,7 +1,5 @@
 package xyz.miyayu.yobsub.yobsubcord.discord.commands
 
-import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.components.Button
@@ -20,7 +18,7 @@ class MakeButton :ListenerAdapter(){
         val component = mutableListOf<Component>(
             Button.primary("on_mention","\uD83D\uDCACメンション通知ON"),
             Button.success("on_dm","\uD83D\uDCEBDM通知ON"),
-            Button.danger("claer","通知解除")
+            Button.danger("clear","通知解除")
         )
 
         //DMが無効ならボタンを削除
