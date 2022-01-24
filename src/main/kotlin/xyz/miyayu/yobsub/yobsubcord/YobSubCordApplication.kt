@@ -24,6 +24,12 @@ fun main(args: Array<String>) {
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
     logger.info("DISCORDTOKEN:\t%s".format(EnvWrapper.DISCORD_TOKEN))
+    logger.info("ADMINROLE:\t%s".format(EnvWrapper.ADMIN_ROLE))
+    logger.info("ALERTROLE:\t%s".format(EnvWrapper.ALERT_ROLE))
+    logger.info("DMALERTROLE:\t%s".format(EnvWrapper.DM_ALERT_ROLE))
+    logger.info("ALERTCHANNEL:\t%s".format(EnvWrapper.ALERT_CHANNEL))
+    logger.info("DEBUGUSER:\t%s".format(EnvWrapper.DEBUG_USER))
+    logger.info("DEBUGGUILD:\t%s".format(EnvWrapper.DEBUG_GUILD))
 }
 fun loadDiscord(){
     val jda: JDA = JDAWrapper.getJDA()
