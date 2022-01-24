@@ -53,6 +53,22 @@ class PushButton:ListenerAdapter() {
         }
     }
     fun removeRoles(event: ButtonClickEvent){
+        val code = removeRole(event,event.jda.getRoleById(EnvWrapper.ALERT_ROLE))
+                || removeRole(event,event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE))
 
+        if(!code)event.reply("正常に処理が完了しました").setEphemeral(true).queue()
+
+    }
+    fun removeRole(event:ButtonClickEvent,role:Role?):Boolean{
+        try{
+            if(!event.member!!.roles.contains(role))
+                return false
+            event.guild!!.removeRoleFromMember(event.member!!,role!!).queue()
+            return false
+        }catch(e:Exception){
+            event.reply("処理に失敗したため購読解除ができませんでした。運営に報告してください。\tエラー内容：" + e.message).queue()
+            e.stackTrace
+            return true
+        }
     }
 }
