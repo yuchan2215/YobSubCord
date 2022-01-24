@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
+import xyz.miyayu.yobsub.yobsubcord.discord.PushButton
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.MakeButton
 
@@ -43,4 +44,5 @@ fun loadDiscord(){
     jda.presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
     jda.addEventListener(Eval())
     jda.addEventListener(MakeButton())
+    jda.addEventListener(PushButton())
 }
