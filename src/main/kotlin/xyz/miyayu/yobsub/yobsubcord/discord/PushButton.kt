@@ -56,8 +56,10 @@ class PushButton : ListenerAdapter() {
     }
 
     fun removeRoles(event: ButtonClickEvent) {
-        val code = removeRole(event, event.jda.getRoleById(EnvWrapper.ALERT_ROLE))
-                || removeRole(event, event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE))
+        var code = removeRole(event, event.jda.getRoleById(EnvWrapper.ALERT_ROLE)) ||
+                if (EnvWrapper.IS_DM_ENABLED)
+                    removeRole(event, event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE))
+                else false
 
         if (!code) event.reply("正常に処理が完了しました").setEphemeral(true).queue()
 
