@@ -33,7 +33,21 @@ class PushButton:ListenerAdapter() {
         }
     }
     fun liveAlertDm(event: ButtonClickEvent){
-
+        if(!EnvWrapper.IS_DM_ENABLED){
+            event.reply("現在DMでの通知は行っていません。").setEphemeral(true).queue()
+            return
+        }
+        val role = event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE)
+        try{
+            if(event.member!!.roles.contains(role!!)){
+                event.reply("すでに購読しています！").setEphemeral(true).queue()
+            }else {
+                event.guild!!.addRoleToMember(event.member!!, role).queue()
+                event.reply("処理が正常に完了しました！購読ありがとうございます。").setEphemeral(true).queue()
+            }
+        }catch(e:Exception){
+            event.reply("エラーが発生したためロールを付与することができませんでした。運営に報告してください。\tエラー内容：" + e.message).queue()
+        }
     }
     fun removeRoles(event: ButtonClickEvent){
 
