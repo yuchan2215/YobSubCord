@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
+import xyz.miyayu.yobsub.yobsubcord.discord.commands.MakeButton
 
 @SpringBootApplication
 class YobSubCordApplication
@@ -41,4 +42,5 @@ fun loadDiscord(){
     val jda: JDA = JDAWrapper.getJDA()
     jda.presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
     jda.addEventListener(Eval())
+    jda.addEventListener(MakeButton())
 }
