@@ -40,7 +40,9 @@ fun loadEnv() {
     ))
 }
 fun loadDiscord(){
+    println("Starting Discord Bot!!")
     val jda: JDA = JDAWrapper.getJDA()
+    println("Finish Loading Discord Bot!!")
     jda.presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
     jda.addEventListener(Eval())
     jda.addEventListener(MakeButton())

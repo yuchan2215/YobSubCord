@@ -14,9 +14,13 @@ class JDAWrapper {
         fun getJDA():JDA{
             if(jda != null)return jda!!
             try{
+                print("a")
                 jda = JDABuilder.createDefault(EnvWrapper.DISCORD_TOKEN).build()
+                print("b")
                 return jda!!
             }catch(e:Exception){
+                e.stackTrace
+                print("c")
                 error(e)
             }
         }
