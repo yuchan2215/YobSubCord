@@ -1,9 +1,12 @@
-# シングルコア環境での注意点
-シングルコアのCPU上だと正常に動作しないことが確認されています。 #1
+# service登録
+シングルコアの場合
+```shell
+cd services
+ # シングルコア
+sudo sh ./regist-single.sh
 
-[single-core.sh](single-core.sh)を利用することで正常に実行することができます。
-```
-sh single-core.sh jarのパス
+ # マルチコア
+sudo sh ./regist-multi.sh
 ```
 
 # ENVファイルの作成
