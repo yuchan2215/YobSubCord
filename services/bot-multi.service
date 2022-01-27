@@ -6,6 +6,7 @@ User = tapioca
 Group = tapioca
 SuccessExitStatus = 143
 TimeoutStopSec = 10
+EnvironmentFile= /var/tapioca/YobSubCord/.env
 WorkingDirectory= /var/tapioca/YobSubCord
 ExecStart= sh /var/tapioca/YobSubCord/services/multi-core.sh /var/tapioca/YobSubCord/build/libs/YobSubCord-0.0.1-SNAPSHOT.jar
 Restart = on-abort
