@@ -4,6 +4,9 @@ java 17.0.2以降 (17.0.1はシングルコア環境で正常動作しない不�
 # install
 `/var/tapioca/`にて git clone を実行します。そうすると、`/var/tapioca/YobSubCord/`ディレクトリが作成されます。
 
+# build
+`YobSubCord`ディレクトリ内で`sh ./gradlew build`と実行します。そうすると`/var/tapipca/YobSubCord/build/libs/YobSubCord....jar/`が作成されます
+
 # ENVファイルの作成
 次の内容でenvファイル(.env)を作成します。
 ```dotenv
