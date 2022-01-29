@@ -25,6 +25,8 @@ ALERTCHANNEL = # 通知するDiscordチャンネルID #
 
 # LICENSES
 [このプロジェクトのライセンス](LICENSE)
+このプロジェクトを利用する場合は、厳しいライセンス事項がありますので確認してください。
+
  - jackson-module-kotlin
    - [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
  - jackson-module-kotlin
