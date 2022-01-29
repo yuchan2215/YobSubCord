@@ -21,9 +21,9 @@ class Challenge {
         params.forEach{
             weblogger.info(it.key + ":" + it.value)
         }
-        val hubMode = params.getOrDefault("hub_mode","")
-        val hubVerifyToken = params.getOrDefault("hub_verify_token","")
-        val hubChallenge = params.getOrDefault("hub_challenge","")
+        val hubMode = params.getOrDefault("hub.mode","")
+        val hubVerifyToken = params.getOrDefault("hub.verify_token","")
+        val hubChallenge = params.getOrDefault("hub.challenge","")
         return if(hubMode == "subscribe" || hubMode == "unsubscribe"){
             if(hubVerifyToken == EnvWrapper.TOKEN){
                 weblogger.info("--OK--")
