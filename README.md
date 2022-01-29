@@ -1,6 +1,9 @@
 # 動作環境
 java 17.0.2以降 (17.0.1はシングルコア環境で正常動作しない不具合が確認されています)
 
+# install
+`/var/tapioca/`にて git clone を実行します。そうすると、`/var/tapioca/YobSubCord/`ディレクトリが作成されます。
+
 # ENVファイルの作成
 次の内容でenvファイル(.env)を作成します。
 ```dotenv
