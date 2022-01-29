@@ -1,0 +1,29 @@
+<configuration>
+    <!-- 標準出力 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%white(%d{yyyy/MM/dd HH:mm:ss}) %cyan(%logger{15}) %highlight(%-5level) [%thread] -  %highlight(%msg%n)
+            </pattern>
+        </encoder>
+    </appender>
+    <!-- ファイル出力 -->
+    <appender name="FILEOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./log/latest.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/archive.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
+        </encoder>
+
+    </appender>
+    <!-- root -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILEOUT" />
+    </root>
+</configuration>
