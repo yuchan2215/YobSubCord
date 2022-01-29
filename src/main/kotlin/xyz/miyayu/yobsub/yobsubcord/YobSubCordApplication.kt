@@ -41,6 +41,7 @@ fun loadEnv() {
     EnvWrapper.YTCHANNELS.forEach {
         logger.info("YTCHANNELS:\t%s".format(it))
     }
+    logger.info("TOKEN:\t%s".format(EnvWrapper.TOKEN))
 }
 fun loadDiscord(){
     val jda: JDA = JDAWrapper.getJDA()
