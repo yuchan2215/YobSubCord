@@ -15,19 +15,19 @@ class Challenge {
     val weblogger = LoggerFactory.getLogger("xyz.miyayu.yobsub.netlog")
     @GetMapping("hub")
     fun getChallenge(
-        @RequestParam params:Map<String,String>,
-        @RequestParam(name = "hub_mode", required = true)hub_mode: String,
-        @RequestParam(name = "hub_challenge", required = true)hub_challenge:String,
-        @RequestParam(name = "hub_verify_token", required = true)hub_verify_token:String
+        @RequestParam params:Map<String,String>
     ) : ResponseEntity<String> {
         weblogger.info("--Challenge Start--")
         params.forEach{
             weblogger.info(it.key + ":" + it.value)
         }
-        return if(hub_mode == "subscribe" || hub_mode == "unsubscribe"){
-            if(hub_verify_token == EnvWrapper.TOKEN){
+        val hubMode = params.getOrDefault("hub_mode","")
+        val hubVerifyToken = params.getOrDefault("hub_verify_token","")
+        val hubChallenge = params.getOrDefault("hub_challenge","")
+        return if(hubMode == "subscribe" || hubMode == "unsubscribe"){
+            if(hubVerifyToken == EnvWrapper.TOKEN){
                 weblogger.info("--OK--")
-                ResponseEntity<String>(hub_challenge,HttpStatus.OK)
+                ResponseEntity<String>(hubChallenge,HttpStatus.OK)
             }else{
                 weblogger.info("--ERROR--")
                 ResponseEntity<String>("token unmatch", HttpStatus.BAD_REQUEST)
