@@ -15,11 +15,15 @@ class Challenge {
     val weblogger = LoggerFactory.getLogger("xyz.miyayu.yobsub.netlog")
     @GetMapping("hub")
     fun getChallenge(
+        @RequestParam params:Map<String,String>,
         @RequestParam(name = "hub_mode", required = true)hub_mode: String,
         @RequestParam(name = "hub_challenge", required = true)hub_challenge:String,
         @RequestParam(name = "hub_verify_token", required = true)hub_verify_token:String
     ) : ResponseEntity<String> {
-        weblogger.info("Challenge Start\nMode: %s\nchallenge: %s\nverify: %s".format(hub_mode,hub_challenge,hub_verify_token))
+        weblogger.info("--Challenge Start--")
+        params.forEach{
+            weblogger.info(it.key + ":" + it.value)
+        }
         return if(hub_mode == "subscribe" || hub_mode == "unsubscribe"){
             if(hub_verify_token == EnvWrapper.TOKEN){
                 weblogger.info("--OK--")
