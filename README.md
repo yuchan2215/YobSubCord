@@ -1,13 +1,5 @@
-# service登録
-シングルコアの場合
-```shell
-cd services
- # シングルコア
-sudo sh ./regist-single.sh
-
- # マルチコア
-sudo sh ./regist-multi.sh
-```
+# 動作環境
+java 17.0.2以降 (17.0.1はシングルコア環境で正常動作しない不具合が確認されています)
 
 # ENVファイルの作成
 次の内容でenvファイル(.env)を作成します。
