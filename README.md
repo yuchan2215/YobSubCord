@@ -1,16 +1,20 @@
-# service登録
-シングルコアの場合
-```shell
-cd services
- # シングルコア
-sudo sh ./regist-single.sh
+# 動作環境
+java 17.0.2以降 (17.0.1はシングルコア環境で正常動作しない不具合が確認されています)
 
- # マルチコア
-sudo sh ./regist-multi.sh
-```
+# install
+`/var/tapioca/`にて git clone を実行します。そうすると、`/var/tapioca/YobSubCord/`ディレクトリが作成されます。
+
+# build
+`YobSubCord`ディレクトリ内で`sh ./gradlew build`と実行します。そうすると`/var/tapipca/YobSubCord/build/libs/YobSubCord....jar/`が作成されます
+
+# サービス登録
+Ubuntu 20.0.4の場合は、サービスとして登録することによって`systemctl`コマンドによって実行することが可能となります。
+`sudo sh regist.sh`を実行することによって登録ができます。
+
 
 # ENVファイルの作成
 次の内容でenvファイル(.env)を作成します。
+サービス登録してある場合には、.envファイルを `/var/tapioca/.env`と配置してください。
 ```dotenv
 DISCORDTOKEN= # TOKEN HERE #
 ADMINROLE= # 管理者のロールid #
@@ -21,6 +25,8 @@ ALERTCHANNEL = # 通知するDiscordチャンネルID #
 
 # LICENSES
 [このプロジェクトのライセンス](LICENSE)
+このプロジェクトを利用する場合は、厳しいライセンス事項がありますので確認してください。
+
  - jackson-module-kotlin
    - [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
  - jackson-module-kotlin
