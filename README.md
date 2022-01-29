@@ -7,8 +7,14 @@ java 17.0.2以降 (17.0.1はシングルコア環境で正常動作しない不�
 # build
 `YobSubCord`ディレクトリ内で`sh ./gradlew build`と実行します。そうすると`/var/tapipca/YobSubCord/build/libs/YobSubCord....jar/`が作成されます
 
+# サービス登録
+Ubuntu 20.0.4の場合は、サービスとして登録することによって`systemctl`コマンドによって実行することが可能となります。
+`sudo sh regist.sh`を実行することによって登録ができます。
+
+
 # ENVファイルの作成
 次の内容でenvファイル(.env)を作成します。
+サービス登録してある場合には、.envファイルを `/var/tapioca/.env`と配置してください。
 ```dotenv
 DISCORDTOKEN= # TOKEN HERE #
 ADMINROLE= # 管理者のロールid #
