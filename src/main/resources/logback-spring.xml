@@ -21,6 +21,24 @@
         </encoder>
 
     </appender>
+    <!-- WebLog ファイル出力 -->
+    <appender name="NETOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./log/net.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/net.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
+        </encoder>
+
+    </appender>
+    <!-- weblog -->
+    <logger name="xyz.miyayu.yobsub.netlog" level="INFO">
+        <appender-ref ref="NETOUT" />
+    </logger>
     <!-- root -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

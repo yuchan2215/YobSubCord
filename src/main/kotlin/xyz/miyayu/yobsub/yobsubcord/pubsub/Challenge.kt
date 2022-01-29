@@ -12,21 +12,25 @@ import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 class Challenge {
 
     val logger = LoggerFactory.getLogger(Challenge::class.java)
+    val weblogger = LoggerFactory.getLogger("xyz.miyayu.yobsub.netlog")
     @GetMapping("hub")
     fun getChallenge(
         @RequestParam(name = "hub_mode", required = true)hub_mode: String,
         @RequestParam(name = "hub_challenge", required = true)hub_challenge:String,
         @RequestParam(name = "hub_verify_token", required = true)hub_verify_token:String
     ) : ResponseEntity<String> {
-        logger.info("Challenge Start\nMode: %s\nchallenge: %s\nverify: %s".format(hub_mode,hub_challenge,hub_verify_token))
+        weblogger.info("Challenge Start\nMode: %s\nchallenge: %s\nverify: %s".format(hub_mode,hub_challenge,hub_verify_token))
         return if(hub_mode == "subscribe" || hub_mode == "unsubscribe"){
             if(hub_verify_token == EnvWrapper.TOKEN){
+                weblogger.info("--OK--")
                 ResponseEntity<String>(hub_challenge,HttpStatus.OK)
             }else{
-                ResponseEntity<String>("token unmatch",HttpStatus.NOT_FOUND)
+                weblogger.info("--ERROR--")
+                ResponseEntity<String>("token unmatch", HttpStatus.BAD_REQUEST)
             }
         }else{
-            ResponseEntity<String>("HTTP/1.1 404 Not Found", HttpStatus.NOT_FOUND)
+            weblogger.info("--ERROR--")
+            ResponseEntity<String>("HTTP/1.1 404 Not Found", HttpStatus.BAD_REQUEST)
         }
     }
 }
