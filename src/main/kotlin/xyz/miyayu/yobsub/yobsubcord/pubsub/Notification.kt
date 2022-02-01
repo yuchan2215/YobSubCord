@@ -37,11 +37,13 @@ class Notification {
             val videoId = entryMap["yt:videoId"]!!.textContent
             val channelId = entryMap["yt:channelId"]!!.textContent
 
+            //環境変数で定義されていないチャンネルなら
             if(!isApprovalChannel(channelId)){
-                logger.warn("許可されていないチャンネル")
+                notificationLogger.warn("許可されていないチャンネル")
                 logger.info(body)
                 return ResponseEntity("Not Approval Channel",HttpStatus.BAD_REQUEST)
             }
+            notificationLogger.info("video: $videoId, channel: $channelId")
         }
         //削除なら
         else if(nodeMap.containsKey("at:deleted-entry")){
@@ -49,7 +51,7 @@ class Notification {
             val deletedEntry = nodeMap["at:deleted-entry"]!!
             val ref = (deletedEntry as Element).getAttribute("ref")
             val videoId = ref.split(":")[2]
-            print("removed: $videoId")
+            notificationLogger.info("removed: $videoId")
 
 
         }
@@ -63,7 +65,6 @@ class Notification {
     }
 
     /**
-     *
      * 環境変数にチャンネルidが含まれているか
      *
      * @param id チャンネルid
