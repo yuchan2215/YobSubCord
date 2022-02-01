@@ -21,6 +21,9 @@ ADMINROLE= # 管理者のロールid #
 ALERTROLE= # チャンネル内でメンションするロールID #
 DMALERTROLE= # DMで通知するロールID 空白で無効 #
 ALERTCHANNEL = # 通知するDiscordチャンネルID #
+YTCHANNELS = # 通知するYouTubeのチャンネルid , 区切り #
+URL = # PubSubを受信するドメイン #
+YTAPI = # YouTube API KEY #
 ```
 
 # LICENSES
