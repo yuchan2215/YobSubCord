@@ -30,5 +30,6 @@ class EnvWrapper {
             .joinToString("");
 
         val URL: String = DOTENV.get("URL","")
+        val YT_API: String = DOTENV.get("YTAPI","")
     }
 }
