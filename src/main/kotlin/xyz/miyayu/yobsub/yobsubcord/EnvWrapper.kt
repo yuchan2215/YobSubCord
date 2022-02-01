@@ -28,5 +28,7 @@ class EnvWrapper {
             .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
             .map(charPool::get)
             .joinToString("");
+
+        val URL: String = DOTENV.get("URL","")
     }
 }
