@@ -9,6 +9,7 @@ import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.PushButton
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.MakeButton
+import xyz.miyayu.yobsub.yobsubcord.pubsub.subscribe
 
 @SpringBootApplication
 class YobSubCordApplication
@@ -22,6 +23,7 @@ fun main(args: Array<String>) {
     runApplication<YobSubCordApplication>(*args)
     loadEnv()
     loadDiscord()
+    subscribe()
 }
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
