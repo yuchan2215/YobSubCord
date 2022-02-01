@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "xyz.miyayu.yobsub"
-version = "2.1.1"
+version = "2.1.2"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
