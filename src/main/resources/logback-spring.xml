@@ -39,6 +39,9 @@
     <logger name="xyz.miyayu.yobsub.netlog" level="INFO">
         <appender-ref ref="NETOUT" />
     </logger>
+    <logger name="xyz.miyayu.yobsub.notlog" level="INFO">
+        <appender-ref ref="NETOUT" />
+    </logger>
     <!-- root -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
