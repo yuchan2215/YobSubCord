@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.w3c.dom.Node
 import org.xml.sax.InputSource
+import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -26,23 +27,20 @@ class Notification {
         //処理を走ったかどうか確認する
         var runned = false
 
-        val nodeList = feed.childNodes
-        for(i in 0 until nodeList.length){
-            val node = nodeList.item(i)
-            //投稿なら
-            if(node.nodeName.equals("entry") && node.nodeType == Node.ELEMENT_NODE){
-                logger.info("-投稿-")
-                runned = true
-                break
-            }
-            //削除なら
-            if(node.nodeName.equals("at:deleted-entry") && node.nodeType == Node.ELEMENT_NODE){
-                logger.info("-削除-")
-                runned = true
-                break
-            }
+        val nodeMap = getChildNodeMaps(feed)
+        
+        //投稿なら
+        if(nodeMap.containsKey("entry")){
+            logger.info("-投稿-")
+
         }
-        if(!runned){
+        //削除なら
+        else if(nodeMap.containsKey("at:deleted-entry")){
+            logger.info("-削除-")
+
+        }
+        //それ以外なら
+        else{
             logger.warn("不明なDOM")
             logger.info(body)
         }
