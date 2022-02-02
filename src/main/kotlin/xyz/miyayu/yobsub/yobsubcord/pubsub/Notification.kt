@@ -10,6 +10,7 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.xml.sax.InputSource
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
+import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
 import xyz.miyayu.yobsub.yobsubcord.api.getVideo
 import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
 import java.io.StringReader
@@ -56,13 +57,20 @@ class Notification {
                 //現在の日時(UTCを取得)
                 val nowLocalDateTime = LocalDateTime.now(ZoneId.of("UTC"))
 
+                val videoTime = video.videoStatus.run{
+                    if(this == VideoStatus.PRE_LIVE)
+                        return@run video.scheduledTime!!
+                    else{
+                        return@run video.datetime
+                    }
+                }
+
                 //差分(分を取得)
-                val diff = ChronoUnit.MINUTES.between(video.datetime, nowLocalDateTime)
+                val diff = ChronoUnit.MINUTES.between(videoTime, nowLocalDateTime)
                 //24時間以上差が空いているならエラーを返す
                 if(60*24 < diff){
                     throw Exception("24 hour Error!! + $diff")
                 }
-
                 notificationLogger.info("video: $videoId, channel: $channelId diff: $diff")
             }
             //削除なら
