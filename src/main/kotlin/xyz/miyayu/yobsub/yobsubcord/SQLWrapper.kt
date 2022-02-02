@@ -11,3 +11,12 @@ fun getSQLConnection():Connection{
         throw e
     }
 }
+fun createTables(){
+    try {
+        getSQLConnection().use {
+            it.createStatement().executeQuery("CREATE TABLE IF NOT EXISTS videos(videoId TEXT PRIMARY KEY,channelId TEXT,videoTitle TEXT,videoStatus INT,lastLook BLOB)")
+        }
+    }catch(e:Exception){
+        throw e
+    }
+}

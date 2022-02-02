@@ -24,6 +24,8 @@ fun main(args: Array<String>) {
     loadEnv()
     loadDiscord()
     subscribe()
+    //SQLite初期化
+    createTables()
 }
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
