@@ -6,8 +6,10 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-data class video(val videoId:String,val videoTitle:String,val videoStatus:VideoStatus)
+data class video(val videoId:String,val videoTitle:String,val videoStatus:VideoStatus,val datetime: LocalDateTime)
 
 fun getVideo(videoId: String):video{
     try{
@@ -26,6 +28,11 @@ fun getVideo(videoId: String):video{
         val items = jsonObj.getJSONArray("items")
         val snippet = items.getJSONObject(0).getJSONObject("snippet")
         val title = snippet.getString("title")
+        val dateTime = snippet.getString("publishedAt")
+
+        //日付の処理
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val localDateTime = LocalDateTime.parse(dateTime,formatter)
 
         //ライブかどうかそうでないかそ判定する
         val videoStatus = snippet.getString("liveBroadcastContent").run{
@@ -37,7 +44,7 @@ fun getVideo(videoId: String):video{
                 return@run VideoStatus.VIDEO
             }
         }
-        return video(videoId,title,videoStatus)
+        return video(videoId,title,videoStatus,localDateTime)
 
     }catch(ex:Exception){
         throw ex
