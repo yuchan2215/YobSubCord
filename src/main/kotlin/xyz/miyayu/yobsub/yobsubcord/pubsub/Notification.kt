@@ -13,6 +13,7 @@ import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
 import xyz.miyayu.yobsub.yobsubcord.api.getVideo
 import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
+import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.io.StringReader
 import java.time.Duration
 import java.time.LocalDateTime
@@ -72,7 +73,16 @@ class Notification {
                 if (60 * 24 < diff) {
                     throw Exception("24 hour Error!! + $diff")
                 }
-                notificationLogger.info("video: $videoId, channel: $channelId diff: $diff")
+
+                //データベース上に存在するのか確認
+                val isExists: Boolean = getSQLConnection().use {
+                    val pstmt =
+                        it.prepareStatement("SELECT COUNT(videoId) as CNT FROM videos WHERE videoId= ? GROUP BY videoId")
+                    pstmt.setString(1, videoId)
+                    val result = pstmt.executeQuery()
+                    return@use result.next() && result.getInt("CNT") == 1
+                }
+                notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
             }
 
             //削除なら
