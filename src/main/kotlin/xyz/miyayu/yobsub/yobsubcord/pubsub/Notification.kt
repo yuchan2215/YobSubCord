@@ -25,8 +25,9 @@ import kotlin.time.DurationUnit
 class Notification {
     val logger = LoggerFactory.getLogger(Notification::class.java)
     val notificationLogger = LoggerFactory.getLogger("xyz.miyayu.yobsub.notlog")
+
     @PostMapping("hub")
-    fun postNotification(@RequestBody body: String): ResponseEntity<String>{
+    fun postNotification(@RequestBody body: String): ResponseEntity<String> {
         try {
             val inputSource = InputSource(StringReader(body))
 
@@ -57,10 +58,10 @@ class Notification {
                 //現在の日時(UTCを取得)
                 val nowLocalDateTime = LocalDateTime.now(ZoneId.of("UTC"))
 
-                val videoTime = video.videoStatus.run{
-                    if(this == VideoStatus.PRE_LIVE)
+                val videoTime = video.videoStatus.run {
+                    if (this == VideoStatus.PRE_LIVE)
                         return@run video.scheduledTime!!
-                    else{
+                    else {
                         return@run video.datetime
                     }
                 }
@@ -68,11 +69,12 @@ class Notification {
                 //差分(分を取得)
                 val diff = ChronoUnit.MINUTES.between(videoTime, nowLocalDateTime)
                 //24時間以上差が空いているならエラーを返す
-                if(60*24 < diff){
+                if (60 * 24 < diff) {
                     throw Exception("24 hour Error!! + $diff")
                 }
                 notificationLogger.info("video: $videoId, channel: $channelId diff: $diff")
             }
+
             //削除なら
             else if (nodeMap.containsKey("at:deleted-entry")) {
                 logger.info("-削除-")
@@ -90,11 +92,11 @@ class Notification {
                 return ResponseEntity("Unknown data", HttpStatus.BAD_REQUEST)
             }
             return ResponseEntity("", HttpStatus.OK)
-        }catch(ex:Exception){
+        } catch (ex: Exception) {
             notificationLogger.warn("Notification Error!!")
             notificationLogger.error(ex.stackTraceToString())
             //こちらで処理できていないだけなのでokを返す
-            return ResponseEntity("",HttpStatus.OK)
+            return ResponseEntity("", HttpStatus.OK)
         }
     }
 
@@ -104,7 +106,7 @@ class Notification {
      * @param id チャンネルid
      * @return return 環境変数に含まれているか
      */
-    fun isApprovalChannel(id:String):Boolean{
+    fun isApprovalChannel(id: String): Boolean {
         return EnvWrapper.YTCHANNELS.contains(id)
     }
 }
