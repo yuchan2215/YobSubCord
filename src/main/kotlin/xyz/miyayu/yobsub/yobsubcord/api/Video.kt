@@ -9,12 +9,12 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class video(val videoId:String,val videoTitle:String,val videoStatus:VideoStatus,val datetime: LocalDateTime)
+data class Video(val videoId:String, val videoTitle:String, val videoStatus:VideoStatus, val datetime: LocalDateTime,val scheduledTime: LocalDateTime?)
 
-fun getVideo(videoId: String):video{
+fun getVideo(videoId: String):Video{
     try{
         //URl作成
-        val url = URL("https://www.googleapis.com/youtube/v3/videos?key=${EnvWrapper.YT_API}&id=${videoId}&part=snippet")
+        val url = URL("https://www.googleapis.com/youtube/v3/videos?key=${EnvWrapper.YT_API}&id=${videoId}&part=snippet,liveStreamingDetails")
         val http = url.openConnection() as HttpURLConnection
         http.requestMethod = "GET"
         http.connect()
@@ -23,18 +23,29 @@ fun getVideo(videoId: String):video{
         val reader = BufferedReader(InputStreamReader(http.inputStream))
         val result = reader.readText()
 
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
         //JSONの処理
         val jsonObj = JSONObject(result)
         val items = jsonObj.getJSONArray("items")
         val snippet = items.getJSONObject(0).getJSONObject("snippet")
         val title = snippet.getString("title")
-        val dateTime = snippet.getString("publishedAt")
+        var scheduledTime:LocalDateTime? = null
+        val dateTime = snippet.getString("liveBroadcastContent").run{
+            if(this?.equals("live") == true){
+                val liveStreamingDetails = items.getJSONObject(0).getJSONObject("liveStreamingDetails")
+                return@run liveStreamingDetails.getString("actualStartTime")
+            }else if(this?.equals("upcoming") == true){
+                val liveStreamingDetails = items.getJSONObject(0).getJSONObject("liveStreamingDetails")
+                scheduledTime = LocalDateTime.parse(liveStreamingDetails.getString("scheduledStartTime"),formatter)
+            }
+            return@run snippet.getString("publishedAt")
+        }
 
         //日付の処理
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
         val localDateTime = LocalDateTime.parse(dateTime,formatter)
 
-        //ライブかどうかそうでないかそ判定する
+        //ライブかどうかそうでないかを判定する
         val videoStatus = snippet.getString("liveBroadcastContent").run{
             if(this?.equals("live") == true){
                 return@run VideoStatus.NOW_LIVE
@@ -44,7 +55,7 @@ fun getVideo(videoId: String):video{
                 return@run VideoStatus.VIDEO
             }
         }
-        return video(videoId,title,videoStatus,localDateTime)
+        return Video(videoId,title,videoStatus,localDateTime,scheduledTime)
 
     }catch(ex:Exception){
         throw ex
