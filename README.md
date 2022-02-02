@@ -52,5 +52,7 @@ YTAPI = # YouTube API KEY #
    - [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
  - Apache Groovy
    - [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+ - SQLite JDBC
+    - [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
  - JDK17
    - [Oracle No-Fee Terms and Conditions (NFTC)](https://www.oracle.com/downloads/licenses/no-fee-license.html)
