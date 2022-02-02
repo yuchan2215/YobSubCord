@@ -32,6 +32,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") //LICENSE OK
     implementation("org.codehaus.groovy:groovy-all:3.0.9") //LICENSE OK
     implementation("org.xerial:sqlite-jdbc:3.36.0.3") //LICENSE OK
+    implementation("org.json:json:20211205") //LICENSE OK
 
 
 }
