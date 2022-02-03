@@ -8,7 +8,7 @@ SuccessExitStatus = 143
 TimeoutStopSec = 10
 EnvironmentFile= /var/tapioca/.env
 WorkingDirectory= /var/tapioca/YobSubCord/
-ExecStart= /usr/bin/java -jar /var/tapioca/YobSubCord/build/libs/YobSubCord-3.0.0.jar
+ExecStart= /usr/bin/java -jar /var/tapioca/YobSubCord/build/libs/YobSubCord-3.0.1.jar
 Restart = on-abort
 Type = simple
 [Install]
