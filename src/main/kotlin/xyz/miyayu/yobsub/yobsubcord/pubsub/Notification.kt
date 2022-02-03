@@ -14,6 +14,7 @@ import org.xml.sax.InputSource
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
 import xyz.miyayu.yobsub.yobsubcord.api.getVideo
+import xyz.miyayu.yobsub.yobsubcord.discord.alert
 import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
 import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.io.StringReader
@@ -139,6 +140,9 @@ class Notification {
             }
             pstmt.executeUpdate()
         }
+
+        alert(video)
+
 
         notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
         return ResponseEntity("",HttpStatus.OK)
