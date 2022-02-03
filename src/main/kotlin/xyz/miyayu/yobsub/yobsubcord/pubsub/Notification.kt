@@ -1,5 +1,6 @@
 package xyz.miyayu.yobsub.yobsubcord.pubsub
 
+import org.codehaus.groovy.syntax.Types
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -18,6 +19,7 @@ import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.io.StringReader
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -112,8 +114,23 @@ class Notification {
             throw Exception("24 hour Error!! + $diff")
         }
 
-        //データベース上に存在するのか確認
-        val isExists: Boolean = isExistsOnDatabase(videoId)
+        //データベースに追加する
+        getSQLConnection().use{
+            val pstmt =
+                it.prepareStatement("INSERT INTO videos VALUES(?,?,?,?,?,?)")
+            pstmt.setString(1,videoId)
+            pstmt.setString(2,channelId)
+            pstmt.setString(3,video.videoTitle)
+            pstmt.setInt(4,video.videoStatus.dataValue)
+            pstmt.setString(5,toDateString(nowLocalDateTime))
+            if(video.scheduledTime == null){
+                pstmt.setNull(6, Types.STRING)
+            }else{
+                pstmt.setString(6,toDateString(video.scheduledTime))
+            }
+            pstmt.executeUpdate()
+        }
+
         notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
         return ResponseEntity("",HttpStatus.OK)
     }
@@ -129,5 +146,8 @@ class Notification {
         }catch(e:Exception){
             throw e
         }
+    }
+    fun toDateString(localDateTime: LocalDateTime):String{
+        return DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(localDateTime)
     }
 }
