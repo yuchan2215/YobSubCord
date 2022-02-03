@@ -2,6 +2,7 @@ package xyz.miyayu.yobsub.yobsubcord
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Activity
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -13,7 +14,7 @@ import xyz.miyayu.yobsub.yobsubcord.pubsub.subscribe
 
 @SpringBootApplication
 class YobSubCordApplication
-val logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
+val logger: Logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
 
 //バージョン
 val VERSION :String = (YobSubCordApplication::class.java.`package`.implementationVersion?:"Dev,Dev").split(",")[0]

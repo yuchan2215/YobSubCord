@@ -25,9 +25,9 @@ class EnvWrapper {
         }
         private val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val TOKEN = (1..10)
-            .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+            .map { kotlin.random.Random.nextInt(0, charPool.size) }
             .map(charPool::get)
-            .joinToString("");
+            .joinToString("")
 
         val URL: String = DOTENV.get("URL","")
         val YT_API: String = DOTENV.get("YTAPI","")

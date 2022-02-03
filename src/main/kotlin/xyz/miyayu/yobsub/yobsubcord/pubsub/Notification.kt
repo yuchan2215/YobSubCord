@@ -1,5 +1,6 @@
 package xyz.miyayu.yobsub.yobsubcord.pubsub
 
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,17 +16,15 @@ import xyz.miyayu.yobsub.yobsubcord.api.getVideo
 import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
 import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.io.StringReader
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.xml.parsers.DocumentBuilderFactory
-import kotlin.time.DurationUnit
 
 @RestController
 class Notification {
-    val logger = LoggerFactory.getLogger(Notification::class.java)
-    val notificationLogger = LoggerFactory.getLogger("xyz.miyayu.yobsub.notlog")
+    val logger: Logger = LoggerFactory.getLogger(Notification::class.java)
+    val notificationLogger: Logger = LoggerFactory.getLogger("xyz.miyayu.yobsub.notlog")
 
     @PostMapping("hub")
     fun postNotification(@RequestBody body: String): ResponseEntity<String> {
@@ -44,45 +43,7 @@ class Notification {
             if (nodeMap.containsKey("entry")) {
                 logger.info("-投稿-")
                 val entryMap = getChildNodeMaps(nodeMap["entry"]!!)
-                val videoId = entryMap["yt:videoId"]!!.textContent
-                val channelId = entryMap["yt:channelId"]!!.textContent
-
-                //環境変数で定義されていないチャンネルなら
-                if (!isApprovalChannel(channelId)) {
-                    notificationLogger.warn("許可されていないチャンネル")
-                    logger.info(body)
-                    return ResponseEntity("Not Approval Channel", HttpStatus.BAD_REQUEST)
-                }
-                //API経由でVideoを取得
-                val video = getVideo(videoId)
-
-                //現在の日時(UTCを取得)
-                val nowLocalDateTime = LocalDateTime.now(ZoneId.of("UTC"))
-
-                val videoTime = video.videoStatus.run {
-                    if (this == VideoStatus.PRE_LIVE)
-                        return@run video.scheduledTime!!
-                    else {
-                        return@run video.datetime
-                    }
-                }
-
-                //差分(分を取得)
-                val diff = ChronoUnit.MINUTES.between(videoTime, nowLocalDateTime)
-                //24時間以上差が空いているならエラーを返す
-                if (60 * 24 < diff) {
-                    throw Exception("24 hour Error!! + $diff")
-                }
-
-                //データベース上に存在するのか確認
-                val isExists: Boolean = getSQLConnection().use {
-                    val pstmt =
-                        it.prepareStatement("SELECT COUNT(videoId) as CNT FROM videos WHERE videoId= ? GROUP BY videoId")
-                    pstmt.setString(1, videoId)
-                    val result = pstmt.executeQuery()
-                    return@use result.next() && result.getInt("CNT") == 1
-                }
-                notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
+                onPost(entryMap,body)
             }
 
             //削除なら
@@ -118,5 +79,55 @@ class Notification {
      */
     fun isApprovalChannel(id: String): Boolean {
         return EnvWrapper.YTCHANNELS.contains(id)
+    }
+
+    fun onPost(entryMap: Map<String,Node>,body: String): ResponseEntity<String>{
+        val videoId = entryMap["yt:videoId"]!!.textContent
+        val channelId = entryMap["yt:channelId"]!!.textContent
+
+        //環境変数で定義されていないチャンネルなら
+        if (!isApprovalChannel(channelId)) {
+            notificationLogger.warn("許可されていないチャンネル")
+            logger.info(body)
+            return ResponseEntity("Not Approval Channel", HttpStatus.BAD_REQUEST)
+        }
+        //API経由でVideoを取得
+        val video = getVideo(videoId)
+
+        //現在の日時(UTCを取得)
+        val nowLocalDateTime = LocalDateTime.now(ZoneId.of("UTC"))
+
+        val videoTime = video.videoStatus.run {
+            if (this == VideoStatus.PRE_LIVE)
+                return@run video.scheduledTime!!
+            else {
+                return@run video.datetime
+            }
+        }
+
+        //差分(分を取得)
+        val diff = ChronoUnit.MINUTES.between(videoTime, nowLocalDateTime)
+        //24時間以上差が空いているならエラーを返す
+        if (60 * 24 < diff) {
+            throw Exception("24 hour Error!! + $diff")
+        }
+
+        //データベース上に存在するのか確認
+        val isExists: Boolean = isExistsOnDatabase(videoId)
+        notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
+        return ResponseEntity("",HttpStatus.OK)
+    }
+    fun isExistsOnDatabase(videoId: String):Boolean{
+        try{
+            getSQLConnection().use{
+                val pstmt =
+                    it.prepareStatement("SELECT COUNT(videoId) as CNT FROM videos WHERE videoId= ? GROUP BY videoId")
+                pstmt.setString(1, videoId)
+                val result = pstmt.executeQuery()
+                return result.next() && result.getInt("CNT") == 1
+            }
+        }catch(e:Exception){
+            throw e
+        }
     }
 }
