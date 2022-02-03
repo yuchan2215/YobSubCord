@@ -2,6 +2,7 @@ package xyz.miyayu.yobsub.yobsubcord
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Activity
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -9,11 +10,12 @@ import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.PushButton
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.MakeButton
+import xyz.miyayu.yobsub.yobsubcord.discord.commands.Test
 import xyz.miyayu.yobsub.yobsubcord.pubsub.subscribe
 
 @SpringBootApplication
 class YobSubCordApplication
-val logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
+val logger: Logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
 
 //バージョン
 val VERSION :String = (YobSubCordApplication::class.java.`package`.implementationVersion?:"Dev,Dev").split(",")[0]
@@ -24,6 +26,8 @@ fun main(args: Array<String>) {
     loadEnv()
     loadDiscord()
     subscribe()
+    //SQLite初期化
+    createTables()
 }
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
@@ -52,4 +56,5 @@ fun loadDiscord(){
     jda.addEventListener(Eval())
     jda.addEventListener(MakeButton())
     jda.addEventListener(PushButton())
+    jda.addEventListener(Test())
 }

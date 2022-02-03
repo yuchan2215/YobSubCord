@@ -1,5 +1,6 @@
 package xyz.miyayu.yobsub.yobsubcord.pubsub
 
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,8 +12,8 @@ import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 @RestController
 class Challenge {
 
-    val logger = LoggerFactory.getLogger(Challenge::class.java)
-    val weblogger = LoggerFactory.getLogger("xyz.miyayu.yobsub.netlog")
+    //val logger = LoggerFactory.getLogger(Challenge::class.java)
+    val webLogger: Logger = LoggerFactory.getLogger("xyz.miyayu.yobsub.netlog")
     @GetMapping("hub")
     fun getChallenge(
         @RequestParam params:Map<String,String>
@@ -27,14 +28,14 @@ class Challenge {
         val hubChallenge = params.getOrDefault("hub.challenge","")
         return if(hubMode == "subscribe" || hubMode == "unsubscribe"){
             if(hubVerifyToken == EnvWrapper.TOKEN){
-                weblogger.info("--CHALLENGE OK--")
+                webLogger.info("--CHALLENGE OK--")
                 ResponseEntity<String>(hubChallenge,HttpStatus.OK)
             }else{
-                weblogger.info("--CHALLENGE ERROR--")
+                webLogger.info("--CHALLENGE ERROR--")
                 ResponseEntity<String>("token unmatch", HttpStatus.BAD_REQUEST)
             }
         }else{
-            weblogger.info("--CHALLENGE ERROR--")
+            webLogger.info("--CHALLENGE ERROR--")
             ResponseEntity<String>("HTTP/1.1 404 Not Found", HttpStatus.BAD_REQUEST)
         }
     }
