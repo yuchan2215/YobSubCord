@@ -93,6 +93,15 @@ class Notification {
             logger.info(body)
             return ResponseEntity("Not Approval Channel", HttpStatus.BAD_REQUEST)
         }
+
+        //データベース上に存在するのか確認
+        val isExists: Boolean = isExistsOnDatabase(videoId)
+
+        if(isExists){
+            //TODO 存在するときの処理
+            return ResponseEntity("hoge",HttpStatus.OK)
+        }
+
         //API経由でVideoを取得
         val video = getVideo(videoId)
 
