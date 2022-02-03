@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "xyz.miyayu.yobsub"
-version = "2.1.2"
+version = "3.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -31,6 +31,9 @@ dependencies {
     implementation("net.dv8tion:JDA:5.0.0-alpha.4") //LICENSE OK
     testImplementation("org.springframework.boot:spring-boot-starter-test") //LICENSE OK
     implementation("org.codehaus.groovy:groovy-all:3.0.9") //LICENSE OK
+    implementation("org.xerial:sqlite-jdbc:3.36.0.3") //LICENSE OK
+    implementation("org.json:json:20211205") //LICENSE OK
+
 
 }
 
