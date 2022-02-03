@@ -10,6 +10,7 @@ import xyz.miyayu.yobsub.yobsubcord.discord.JDAWrapper
 import xyz.miyayu.yobsub.yobsubcord.discord.PushButton
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.MakeButton
+import xyz.miyayu.yobsub.yobsubcord.discord.commands.Test
 import xyz.miyayu.yobsub.yobsubcord.pubsub.subscribe
 
 @SpringBootApplication
@@ -55,4 +56,5 @@ fun loadDiscord(){
     jda.addEventListener(Eval())
     jda.addEventListener(MakeButton())
     jda.addEventListener(PushButton())
+    jda.addEventListener(Test())
 }
