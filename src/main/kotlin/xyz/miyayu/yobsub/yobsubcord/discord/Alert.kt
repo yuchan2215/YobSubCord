@@ -1,6 +1,7 @@
 package xyz.miyayu.yobsub.yobsubcord.discord
 
 
+import net.dv8tion.jda.api.entities.ChannelType
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.Video
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
@@ -25,8 +26,14 @@ fun alert(video: Video){
                 getURL(video.videoId)
             )
         }
+    val channelType = JDAWrapper.getJDA().getGuildChannelById(EnvWrapper.ALERT_CHANNEL)?.type
     val textChannel = JDAWrapper.getJDA().getTextChannelById(EnvWrapper.ALERT_CHANNEL)
-    textChannel?.sendMessage(message)?.queue()
+
+    if(channelType == ChannelType.NEWS){
+        JDAWrapper.getJDA().getNewsChannelById(EnvWrapper.ALERT_CHANNEL)?.sendMessage(message)?.queue()
+    }else{
+        textChannel?.sendMessage(message)?.queue()
+    }
 }
 fun toJapanTimeString(localDateTime: LocalDateTime):String{
     val utcOffsetDateTime = localDateTime.atZone(ZoneOffset.UTC)
