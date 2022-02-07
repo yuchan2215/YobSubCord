@@ -22,6 +22,7 @@ class JDAWrapper {
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .setChunkingFilter(ChunkingFilter.ALL)
+                    .setRequestTimeoutRetry(false)
                     .build()
                 return jda!!
             }catch(e:Exception){
