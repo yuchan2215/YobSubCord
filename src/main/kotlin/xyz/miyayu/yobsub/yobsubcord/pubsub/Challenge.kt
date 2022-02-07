@@ -14,27 +14,28 @@ class Challenge {
 
     //val logger = LoggerFactory.getLogger(Challenge::class.java)
     val webLogger: Logger = LoggerFactory.getLogger("xyz.miyayu.yobsub.netlog")
+
     @GetMapping("hub")
     fun getChallenge(
-        @RequestParam params:Map<String,String>
-    ) : ResponseEntity<String> {
+        @RequestParam params: Map<String, String>
+    ): ResponseEntity<String> {
         /**
         weblogger.info("--Challenge Start--")
         params.forEach{
-            weblogger.info(it.key + ":" + it.value)
+        weblogger.info(it.key + ":" + it.value)
         }**/
-        val hubMode = params.getOrDefault("hub.mode","")
-        val hubVerifyToken = params.getOrDefault("hub.verify_token","")
-        val hubChallenge = params.getOrDefault("hub.challenge","")
-        return if(hubMode == "subscribe" || hubMode == "unsubscribe"){
-            if(hubVerifyToken == EnvWrapper.TOKEN){
+        val hubMode = params.getOrDefault("hub.mode", "")
+        val hubVerifyToken = params.getOrDefault("hub.verify_token", "")
+        val hubChallenge = params.getOrDefault("hub.challenge", "")
+        return if (hubMode == "subscribe" || hubMode == "unsubscribe") {
+            if (hubVerifyToken == EnvWrapper.TOKEN) {
                 webLogger.info("--CHALLENGE OK--")
-                ResponseEntity<String>(hubChallenge,HttpStatus.OK)
-            }else{
+                ResponseEntity<String>(hubChallenge, HttpStatus.OK)
+            } else {
                 webLogger.info("--CHALLENGE ERROR--")
                 ResponseEntity<String>("token unmatch", HttpStatus.BAD_REQUEST)
             }
-        }else{
+        } else {
             webLogger.info("--CHALLENGE ERROR--")
             ResponseEntity<String>("HTTP/1.1 404 Not Found", HttpStatus.BAD_REQUEST)
         }

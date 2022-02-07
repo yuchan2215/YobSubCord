@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.w3c.dom.Element
-import org.w3c.dom.Node
 import org.xml.sax.InputSource
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
-import xyz.miyayu.yobsub.yobsubcord.api.Video
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
 import xyz.miyayu.yobsub.yobsubcord.api.getVideo
 import xyz.miyayu.yobsub.yobsubcord.discord.alert
@@ -25,7 +23,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
-import java.time.temporal.TemporalUnit
 import javax.xml.parsers.DocumentBuilderFactory
 
 @RestController
@@ -97,7 +94,7 @@ class Notification {
         return EnvWrapper.YTCHANNELS.contains(id)
     }
 
-    fun onPost(videoId: String,channelId: String): ResponseEntity<String>{
+    fun onPost(videoId: String, channelId: String): ResponseEntity<String> {
 
         //データベース上に存在するのか確認
         val isExists: Boolean = isExistsOnDatabase(videoId)
@@ -105,22 +102,22 @@ class Notification {
         //現在の日時(UTCを取得)
         val nowLocalDateTime = LocalDateTime.now(ZoneId.of("UTC"))
 
-        if(isExists){
+        if (isExists) {
             //SQL Statusの確認
             val sqlData = getSQLVideo(videoId)
             val sqlStatus = sqlData.videoStatus
 
             //ライブ前でないならなにもしない
-            if(sqlStatus != VideoStatus.PRE_LIVE){
-                return ResponseEntity(BEFORE_LIVE,HttpStatus.OK)
+            if (sqlStatus != VideoStatus.PRE_LIVE) {
+                return ResponseEntity(BEFORE_LIVE, HttpStatus.OK)
             }
 
             //差分
-            val diff = getDiff(sqlData.lastLook,nowLocalDateTime)
+            val diff = getDiff(sqlData.lastLook, nowLocalDateTime)
 
             //1分未満なら
-            if(1 > diff){
-                return ResponseEntity(ONE_MIN_ERROR,HttpStatus.OK)
+            if (1 > diff) {
+                return ResponseEntity(ONE_MIN_ERROR, HttpStatus.OK)
             }
 
             //API経由で確認。エラーなら削除されたとして処理
@@ -128,12 +125,12 @@ class Notification {
                 try {
                     return@run getVideo(videoId)
                 } catch (e: JSONException) {
-                    getSQLConnection().use{
+                    getSQLConnection().use {
                         val pstmt =
                             it.prepareStatement("UPDATE videos SET lastLook = ? , videoStatus = ? WHERE videoId = ?")
-                        pstmt.setString(1,toDateString(nowLocalDateTime))
-                        pstmt.setInt(2,VideoStatus.DELETED.dataValue)
-                        pstmt.setString(3,videoId)
+                        pstmt.setString(1, toDateString(nowLocalDateTime))
+                        pstmt.setInt(2, VideoStatus.DELETED.dataValue)
+                        pstmt.setString(3, videoId)
                         pstmt.executeUpdate()
                     }
                     return ResponseEntity("", HttpStatus.OK)
@@ -141,7 +138,7 @@ class Notification {
             }
 
             //まだ配信中でないなら差し戻し。
-            if(video.videoStatus == VideoStatus.PRE_LIVE){
+            if (video.videoStatus == VideoStatus.PRE_LIVE) {
                 getSQLConnection().use {
                     val pstmt =
                         it.prepareStatement("UPDATE videos SET lastLook = ? WHERE videoId = ?")
@@ -149,10 +146,10 @@ class Notification {
                     pstmt.setString(2, videoId)
                     pstmt.executeUpdate()
                 }
-                return ResponseEntity(NOT_STREAMING,HttpStatus.OK)
+                return ResponseEntity(NOT_STREAMING, HttpStatus.OK)
 
-            //配信中もしくは動画になっているなら
-            }else {
+                //配信中もしくは動画になっているなら
+            } else {
                 getSQLConnection().use {
                     val pstmt =
                         it.prepareStatement("UPDATE videos SET videoTitle = ? , lastLook = ? , videoStatus = ? , liveStartDate = ? WHERE videoId = ?")
@@ -189,18 +186,18 @@ class Notification {
         }
 
         //データベースに追加する
-        getSQLConnection().use{
+        getSQLConnection().use {
             val pstmt =
                 it.prepareStatement("INSERT INTO videos VALUES(?,?,?,?,?,?)")
-            pstmt.setString(1,videoId)
-            pstmt.setString(2,video.channelId)
-            pstmt.setString(3,video.videoTitle)
-            pstmt.setInt(4,video.videoStatus.dataValue)
-            pstmt.setString(5,toDateString(nowLocalDateTime))
-            if(video.scheduledTime == null){
+            pstmt.setString(1, videoId)
+            pstmt.setString(2, video.channelId)
+            pstmt.setString(3, video.videoTitle)
+            pstmt.setInt(4, video.videoStatus.dataValue)
+            pstmt.setString(5, toDateString(nowLocalDateTime))
+            if (video.scheduledTime == null) {
                 pstmt.setNull(6, Types.STRING)
-            }else{
-                pstmt.setString(6,toDateString(video.scheduledTime))
+            } else {
+                pstmt.setString(6, toDateString(video.scheduledTime))
             }
             pstmt.executeUpdate()
         }
@@ -208,26 +205,29 @@ class Notification {
         alert(video)
 
 
-        notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
-        return ResponseEntity("",HttpStatus.OK)
+        notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: false")
+        return ResponseEntity("", HttpStatus.OK)
     }
-    fun getDiff(before: Temporal, after: Temporal): Long{
-        return ChronoUnit.MINUTES.between(before,after)
+
+    fun getDiff(before: Temporal, after: Temporal): Long {
+        return ChronoUnit.MINUTES.between(before, after)
     }
-    fun isExistsOnDatabase(videoId: String):Boolean{
-        try{
-            getSQLConnection().use{
+
+    fun isExistsOnDatabase(videoId: String): Boolean {
+        try {
+            getSQLConnection().use {
                 val pstmt =
                     it.prepareStatement("SELECT COUNT(videoId) as CNT FROM videos WHERE videoId= ? GROUP BY videoId")
                 pstmt.setString(1, videoId)
                 val result = pstmt.executeQuery()
                 return result.next() && result.getInt("CNT") == 1
             }
-        }catch(e:Exception){
+        } catch (e: Exception) {
             throw e
         }
     }
-    fun toDateString(localDateTime: LocalDateTime):String{
+
+    fun toDateString(localDateTime: LocalDateTime): String {
         return DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(localDateTime)
     }
 }

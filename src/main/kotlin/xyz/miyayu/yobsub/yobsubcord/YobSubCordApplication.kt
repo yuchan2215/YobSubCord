@@ -15,11 +15,12 @@ import xyz.miyayu.yobsub.yobsubcord.pubsub.subscribe
 
 @SpringBootApplication
 class YobSubCordApplication
+
 val logger: Logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
 
 //バージョン
-val VERSION :String = (YobSubCordApplication::class.java.`package`.implementationVersion?:"Dev,Dev").split(",")[0]
-val GITTAG :String = (YobSubCordApplication::class.java.`package`.implementationVersion?:"Dev,Dev").split(",")[1]
+val VERSION: String = (YobSubCordApplication::class.java.`package`.implementationVersion ?: "Dev,Dev").split(",")[0]
+val GITTAG: String = (YobSubCordApplication::class.java.`package`.implementationVersion ?: "Dev,Dev").split(",")[1]
 
 fun main(args: Array<String>) {
     runApplication<YobSubCordApplication>(*args)
@@ -29,6 +30,7 @@ fun main(args: Array<String>) {
     //SQLite初期化
     createTables()
 }
+
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
     logger.info("DISCORDTOKEN:\t%s".format(EnvWrapper.DISCORD_TOKEN))
@@ -38,19 +40,22 @@ fun loadEnv() {
     logger.info("ALERTCHANNEL:\t%s".format(EnvWrapper.ALERT_CHANNEL))
     logger.info("DEBUGUSER:\t%s".format(EnvWrapper.DEBUG_USER))
     logger.info("DEBUGGUILD:\t%s".format(EnvWrapper.DEBUG_GUILD))
-    logger.info("DM通知:\t%s".format(
-        if(EnvWrapper.IS_DM_ENABLED)
-            "有効"
-        else
-            "無効"
-    ))
+    logger.info(
+        "DM通知:\t%s".format(
+            if (EnvWrapper.IS_DM_ENABLED)
+                "有効"
+            else
+                "無効"
+        )
+    )
     EnvWrapper.YTCHANNELS.forEach {
         logger.info("YTCHANNELS:\t%s".format(it))
     }
     logger.info("TOKEN:\t%s".format(EnvWrapper.TOKEN))
     logger.info("URL:\t%s".format(EnvWrapper.URL))
 }
-fun loadDiscord(){
+
+fun loadDiscord() {
     val jda: JDA = JDAWrapper.getJDA()
     jda.presence.activity = Activity.playing("tb.about VERSION:$VERSION TAG:$GITTAG")
     jda.addEventListener(Eval())

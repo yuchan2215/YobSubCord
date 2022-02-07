@@ -1,6 +1,5 @@
 package xyz.miyayu.yobsub.yobsubcord.api
 
-import org.json.JSONException
 import org.json.JSONObject
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import java.io.BufferedReader
@@ -10,12 +9,20 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class Video(val videoId:String, val videoTitle:String, val videoStatus:VideoStatus, val datetime: LocalDateTime,val scheduledTime: LocalDateTime?,val channelId: String)
+data class Video(
+    val videoId: String,
+    val videoTitle: String,
+    val videoStatus: VideoStatus,
+    val datetime: LocalDateTime,
+    val scheduledTime: LocalDateTime?,
+    val channelId: String
+)
 
-fun getVideo(videoId: String):Video{
-    try{
+fun getVideo(videoId: String): Video {
+    try {
         //URl作成
-        val url = URL("https://www.googleapis.com/youtube/v3/videos?key=${EnvWrapper.YT_API}&id=${videoId}&part=snippet,liveStreamingDetails")
+        val url =
+            URL("https://www.googleapis.com/youtube/v3/videos?key=${EnvWrapper.YT_API}&id=${videoId}&part=snippet,liveStreamingDetails")
         val http = url.openConnection() as HttpURLConnection
         http.requestMethod = "GET"
         http.connect()
@@ -31,35 +38,35 @@ fun getVideo(videoId: String):Video{
         val items = jsonObj.getJSONArray("items")
         val snippet = items.getJSONObject(0).getJSONObject("snippet")
         val title = snippet.getString("title")
-        var scheduledTime:LocalDateTime? = null
+        var scheduledTime: LocalDateTime? = null
         val channelId = snippet.getString("channelId")
-        val dateTime = snippet.getString("liveBroadcastContent").run{
-            if(this?.equals("live") == true){
+        val dateTime = snippet.getString("liveBroadcastContent").run {
+            if (this?.equals("live") == true) {
                 val liveStreamingDetails = items.getJSONObject(0).getJSONObject("liveStreamingDetails")
                 return@run liveStreamingDetails.getString("actualStartTime")
-            }else if(this?.equals("upcoming") == true){
+            } else if (this?.equals("upcoming") == true) {
                 val liveStreamingDetails = items.getJSONObject(0).getJSONObject("liveStreamingDetails")
-                scheduledTime = LocalDateTime.parse(liveStreamingDetails.getString("scheduledStartTime"),formatter)
+                scheduledTime = LocalDateTime.parse(liveStreamingDetails.getString("scheduledStartTime"), formatter)
             }
             return@run snippet.getString("publishedAt")
         }
 
         //日付の処理
-        val localDateTime = LocalDateTime.parse(dateTime,formatter)
+        val localDateTime = LocalDateTime.parse(dateTime, formatter)
 
         //ライブかどうかそうでないかを判定する
-        val videoStatus = snippet.getString("liveBroadcastContent").run{
-            if(this?.equals("live") == true){
+        val videoStatus = snippet.getString("liveBroadcastContent").run {
+            if (this?.equals("live") == true) {
                 return@run VideoStatus.NOW_LIVE
-            }else if(this?.equals("upcoming") == true){
+            } else if (this?.equals("upcoming") == true) {
                 return@run VideoStatus.PRE_LIVE
-            }else{
+            } else {
                 return@run VideoStatus.VIDEO
             }
         }
-        return Video(videoId,title,videoStatus,localDateTime,scheduledTime,channelId)
+        return Video(videoId, title, videoStatus, localDateTime, scheduledTime, channelId)
 
-    }catch(ex:Exception){
+    } catch (ex: Exception) {
         throw ex
     }
 }

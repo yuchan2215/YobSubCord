@@ -23,7 +23,7 @@ class PushButton : ListenerAdapter() {
 
     private fun liveAlert(event: ButtonInteractionEvent) {
         val role = event.jda.getRoleById(EnvWrapper.ALERT_ROLE)
-        giveRole(event,role)
+        giveRole(event, role)
     }
 
     private fun liveAlertDm(event: ButtonInteractionEvent) {
@@ -32,10 +32,10 @@ class PushButton : ListenerAdapter() {
             return
         }
         val role = event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE)
-        giveRole(event,role)
+        giveRole(event, role)
     }
 
-    private fun giveRole(event: ButtonInteractionEvent,role:Role?){
+    private fun giveRole(event: ButtonInteractionEvent, role: Role?) {
         try {
             if (event.member!!.roles.contains(role!!)) {
                 event.reply("すでに購読しています！").setEphemeral(true).queue()
