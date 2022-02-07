@@ -59,12 +59,14 @@ fun alert(video: Video) {
         }
 
     var count = 0
+    val dmRole = JDAWrapper.getJDA().getRoleById(EnvWrapper.DM_ALERT_ROLE)
     //DM通知
-    textChannel?.guild?.pruneMemberCache()
-    textChannel?.guild?.getMembersWithRoles(JDAWrapper.getJDA().getRoleById(EnvWrapper.DM_ALERT_ROLE))?.forEach {
-        it.user.openPrivateChannel().queue { pc ->
+    textChannel?.guild?.loadMembers{
+        if(it.roles.contains(dmRole)) {
             count++
-            pc.sendMessage(dmMessage).queue()
+            it.user.openPrivateChannel().queue{ pc ->
+                pc.sendMessage(dmMessage).queue()
+            }
         }
     }
     logger.info("$count 件のDMを配信しました")
