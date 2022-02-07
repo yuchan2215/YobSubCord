@@ -56,7 +56,7 @@ class Notification {
                     logger.info(body)
                     return ResponseEntity("Not Approval Channel", HttpStatus.BAD_REQUEST)
                 }
-                return onPost(videoId, channelId)
+                return onPost(videoId)
             }
 
             //削除なら
@@ -94,7 +94,7 @@ class Notification {
         return EnvWrapper.YTCHANNELS.contains(id)
     }
 
-    fun onPost(videoId: String, channelId: String): ResponseEntity<String> {
+    fun onPost(videoId: String): ResponseEntity<String> {
 
         //データベース上に存在するのか確認
         val isExists: Boolean = isExistsOnDatabase(videoId)
@@ -205,7 +205,7 @@ class Notification {
         alert(video)
 
 
-        notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: false")
+        notificationLogger.info("video: $videoId diff: $diff exist: false")
         return ResponseEntity("", HttpStatus.OK)
     }
 

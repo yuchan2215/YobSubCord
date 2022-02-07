@@ -4,6 +4,10 @@ import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
+import xyz.miyayu.yobsub.yobsubcord.pubsub.BEFORE_LIVE
+import xyz.miyayu.yobsub.yobsubcord.pubsub.NOT_STREAMING
+import xyz.miyayu.yobsub.yobsubcord.pubsub.Notification
+import xyz.miyayu.yobsub.yobsubcord.pubsub.ONE_MIN_ERROR
 
 class PushButton : ListenerAdapter() {
     override fun onButtonInteraction(event: ButtonInteractionEvent) {
@@ -18,6 +22,17 @@ class PushButton : ListenerAdapter() {
         //解除
         else if (event.button.id.let { it == "clear" }) {
             removeRoles(event)
+        }else if(event.button.id?.startsWith("R") == true){
+            val result = Notification().onPost(event.button.id!!.substring(1))
+            if(result.body == BEFORE_LIVE){
+                event.reply("現在ライブ待ちではないようです！\n教えてくれてありがとうございました！\nボタンを削除します...").setEphemeral(true).queue()
+                event.editButton(null).queue()
+            }else if(result.body == ONE_MIN_ERROR){
+                event.reply("このボタンは全てのユーザーを合わせて１分間隔でしか使用することができません。使えるまで少々お待ちください").setEphemeral(true).queue()
+            }else {
+                event.reply("状況を教えてくれてありがとうございました！更新しました。\nボタンを削除します...").setEphemeral(true).queue()
+                event.editButton(null).queue()
+            }
         }
     }
 

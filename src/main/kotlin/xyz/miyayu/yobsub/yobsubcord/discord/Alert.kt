@@ -1,7 +1,10 @@
 package xyz.miyayu.yobsub.yobsubcord.discord
 
 
+import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.entities.ChannelType
+import net.dv8tion.jda.api.interactions.components.ActionRow
+import net.dv8tion.jda.api.interactions.components.buttons.Button
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.Video
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
@@ -29,10 +32,17 @@ fun alert(video: Video) {
     val channelType = JDAWrapper.getJDA().getGuildChannelById(EnvWrapper.ALERT_CHANNEL)?.type
     val textChannel = JDAWrapper.getJDA().getTextChannelById(EnvWrapper.ALERT_CHANNEL)
 
+    val messageBuilder = MessageBuilder()
+    messageBuilder.setContent(message)
+
+    if(video.videoStatus == VideoStatus.PRE_LIVE){
+        messageBuilder.setActionRows(ActionRow.of(Button.primary("R${video.videoId}","\uD83D\uDD03 再読み込み")))
+    }
+
     if (channelType == ChannelType.NEWS) {
-        JDAWrapper.getJDA().getNewsChannelById(EnvWrapper.ALERT_CHANNEL)?.sendMessage(message)?.queue()
+        JDAWrapper.getJDA().getNewsChannelById(EnvWrapper.ALERT_CHANNEL)?.sendMessage(messageBuilder.build())?.queue()
     } else {
-        textChannel?.sendMessage(message)?.queue()
+        textChannel?.sendMessage(messageBuilder.build())?.queue()
     }
 }
 
