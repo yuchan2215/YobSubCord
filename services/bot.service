@@ -2,8 +2,8 @@
 Description = Tapiocabot
 [Service]
 CPUAccounting=yes
-User = tapioca
-Group = tapioca
+User=tapioca
+Group=tapioca
 SuccessExitStatus = 143
 TimeoutStopSec = 10
 EnvironmentFile= /var/tapioca/.env
