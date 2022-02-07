@@ -10,26 +10,28 @@ import org.slf4j.LoggerFactory
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 
 class JDAWrapper {
-    companion object{
+    companion object {
         //ロガー
         val LOGGER: Logger = LoggerFactory.getLogger(JDAWrapper::class.java)
-        private var jda:JDA? = null
-        fun getJDA():JDA{
-            if(jda != null)return jda!!
-            try{
+        private var jda: JDA? = null
+        fun getJDA(): JDA {
+            if (jda != null) return jda!!
+            try {
                 jda = JDABuilder
                     .createDefault(EnvWrapper.DISCORD_TOKEN)
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .setChunkingFilter(ChunkingFilter.ALL)
+                    .setRequestTimeoutRetry(false)
                     .build()
                 return jda!!
-            }catch(e:Exception){
+            } catch (e: Exception) {
                 error(e)
             }
         }
     }
-    init{
+
+    init {
         LOGGER
         getJDA()
     }

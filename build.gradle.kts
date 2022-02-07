@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "xyz.miyayu.yobsub"
-version = "3.0.1"
+version = "3.0.2"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -28,7 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect") //LICENSE OK
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") //LICENSE OK
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") //LICENSE OK
-    implementation("net.dv8tion:JDA:5.0.0-alpha.4") //LICENSE OK
+    implementation("net.dv8tion:JDA:5.0.0-alpha.5") //LICENSE OK
     testImplementation("org.springframework.boot:spring-boot-starter-test") //LICENSE OK
     implementation("org.codehaus.groovy:groovy-all:3.0.9") //LICENSE OK
     implementation("org.xerial:sqlite-jdbc:3.36.0.3") //LICENSE OK
