@@ -29,6 +29,7 @@ fun main(args: Array<String>) {
     subscribe()
     //SQLite初期化
     createTables()
+    CheckThread().start()
 }
 
 fun loadEnv() {
