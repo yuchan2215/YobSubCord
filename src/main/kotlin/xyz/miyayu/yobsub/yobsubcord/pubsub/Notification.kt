@@ -22,6 +22,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.time.temporal.Temporal
+import java.time.temporal.TemporalUnit
 import javax.xml.parsers.DocumentBuilderFactory
 
 @RestController
@@ -46,7 +48,16 @@ class Notification {
             if (nodeMap.containsKey("entry")) {
                 logger.info("-投稿-")
                 val entryMap = getChildNodeMaps(nodeMap["entry"]!!)
-                onPost(entryMap,body)
+                val videoId = entryMap["yt:videoId"]!!.textContent
+                val channelId = entryMap["yt:channelId"]!!.textContent
+
+                //環境変数で定義されていないチャンネルなら
+                if (!isApprovalChannel(channelId)) {
+                    notificationLogger.warn("許可されていないチャンネル")
+                    logger.info(body)
+                    return ResponseEntity("Not Approval Channel", HttpStatus.BAD_REQUEST)
+                }
+                onPost(videoId, channelId)
             }
 
             //削除なら
@@ -84,16 +95,7 @@ class Notification {
         return EnvWrapper.YTCHANNELS.contains(id)
     }
 
-    fun onPost(entryMap: Map<String,Node>,body: String): ResponseEntity<String>{
-        val videoId = entryMap["yt:videoId"]!!.textContent
-        val channelId = entryMap["yt:channelId"]!!.textContent
-
-        //環境変数で定義されていないチャンネルなら
-        if (!isApprovalChannel(channelId)) {
-            notificationLogger.warn("許可されていないチャンネル")
-            logger.info(body)
-            return ResponseEntity("Not Approval Channel", HttpStatus.BAD_REQUEST)
-        }
+    fun onPost(videoId: String,channelId: String): ResponseEntity<String>{
 
         //データベース上に存在するのか確認
         val isExists: Boolean = isExistsOnDatabase(videoId)
@@ -118,7 +120,7 @@ class Notification {
         }
 
         //差分(分を取得)
-        val diff = ChronoUnit.MINUTES.between(videoTime, nowLocalDateTime)
+        val diff = getDiff(videoTime, nowLocalDateTime)
         //24時間以上差が空いているならエラーを返す
         if (60 * 24 < diff) {
             throw Exception("24 hour Error!! + $diff")
@@ -146,6 +148,9 @@ class Notification {
 
         notificationLogger.info("video: $videoId, channel: $channelId diff: $diff exist: $isExists")
         return ResponseEntity("",HttpStatus.OK)
+    }
+    fun getDiff(before: Temporal, after: Temporal): Long{
+        return ChronoUnit.MINUTES.between(before,after)
     }
     fun isExistsOnDatabase(videoId: String):Boolean{
         try{
