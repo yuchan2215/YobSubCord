@@ -18,9 +18,8 @@ class JDAWrapper {
             if (jda != null) return jda!!
             try {
                 jda = JDABuilder
-                    .createDefault(EnvWrapper.DISCORD_TOKEN)
+                    .create(EnvWrapper.DISCORD_TOKEN,GatewayIntent.GUILD_MEMBERS)
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .setChunkingFilter(ChunkingFilter.ALL)
                     .setRequestTimeoutRetry(false)
                     .build()
