@@ -131,7 +131,7 @@ class Notification {
             val pstmt =
                 it.prepareStatement("INSERT INTO videos VALUES(?,?,?,?,?,?)")
             pstmt.setString(1,videoId)
-            pstmt.setString(2,channelId)
+            pstmt.setString(2,video.channelId)
             pstmt.setString(3,video.videoTitle)
             pstmt.setInt(4,video.videoStatus.dataValue)
             pstmt.setString(5,toDateString(nowLocalDateTime))

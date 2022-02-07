@@ -9,7 +9,7 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class Video(val videoId:String, val videoTitle:String, val videoStatus:VideoStatus, val datetime: LocalDateTime,val scheduledTime: LocalDateTime?)
+data class Video(val videoId:String, val videoTitle:String, val videoStatus:VideoStatus, val datetime: LocalDateTime,val scheduledTime: LocalDateTime?,val channelId: String)
 
 fun getVideo(videoId: String):Video{
     try{
@@ -31,6 +31,7 @@ fun getVideo(videoId: String):Video{
         val snippet = items.getJSONObject(0).getJSONObject("snippet")
         val title = snippet.getString("title")
         var scheduledTime:LocalDateTime? = null
+        val channelId = snippet.getString("channelId")
         val dateTime = snippet.getString("liveBroadcastContent").run{
             if(this?.equals("live") == true){
                 val liveStreamingDetails = items.getJSONObject(0).getJSONObject("liveStreamingDetails")
@@ -55,7 +56,7 @@ fun getVideo(videoId: String):Video{
                 return@run VideoStatus.VIDEO
             }
         }
-        return Video(videoId,title,videoStatus,localDateTime,scheduledTime)
+        return Video(videoId,title,videoStatus,localDateTime,scheduledTime,channelId)
 
     }catch(ex:Exception){
         throw ex
