@@ -1,5 +1,6 @@
 package xyz.miyayu.yobsub.yobsubcord.api
 
+import org.json.JSONException
 import org.json.JSONObject
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import java.io.BufferedReader
