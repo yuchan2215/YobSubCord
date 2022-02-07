@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.Video
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
+import xyz.miyayu.yobsub.yobsubcord.logger
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -35,8 +36,8 @@ fun alert(video: Video) {
     val messageBuilder = MessageBuilder()
     messageBuilder.setContent(message)
 
-    if(video.videoStatus == VideoStatus.PRE_LIVE){
-        messageBuilder.setActionRows(ActionRow.of(Button.primary("R${video.videoId}","\uD83D\uDD03 再読み込み")))
+    if (video.videoStatus == VideoStatus.PRE_LIVE) {
+        messageBuilder.setActionRows(ActionRow.of(Button.primary("R${video.videoId}", "\uD83D\uDD03 再読み込み")))
     }
 
     if (channelType == ChannelType.NEWS) {
@@ -44,6 +45,30 @@ fun alert(video: Video) {
     } else {
         textChannel?.sendMessage(messageBuilder.build())?.queue()
     }
+    if (!EnvWrapper.IS_DM_ENABLED) return
+    val dmMessage =
+        if (video.videoStatus == VideoStatus.PRE_LIVE) {
+            video.videoStatus.dmText.format(
+                toJapanTimeString(video.scheduledTime!!),
+                getURL(video.videoId)
+            )
+        } else {
+            video.videoStatus.dmText.format(
+                getURL(video.videoId)
+            )
+        }
+
+    var count = 0
+    //DM通知
+    textChannel?.guild?.pruneMemberCache()
+    textChannel?.guild?.getMembersWithRoles(JDAWrapper.getJDA().getRoleById(EnvWrapper.DM_ALERT_ROLE))?.forEach {
+        it.user.openPrivateChannel().queue { pc ->
+            count++
+            pc.sendMessage(dmMessage).queue()
+        }
+    }
+    logger.info("$count 件のDMを配信しました")
+
 }
 
 fun toJapanTimeString(localDateTime: LocalDateTime): String {
