@@ -1,32 +1,32 @@
 package xyz.miyayu.yobsub.yobsubcord.discord
 
 import net.dv8tion.jda.api.entities.Role
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 
 class PushButton : ListenerAdapter() {
-    override fun onButtonClick(event: ButtonClickEvent) {
+    override fun onButtonInteraction(event: ButtonInteractionEvent) {
         //Live-Alert
-        if (event.button?.id.let { it == "on_mention" }) {
+        if (event.button.id.let { it == "on_mention" }) {
             liveAlert((event))
         }
         //Live-Alert(DM)
-        else if (event.button?.id.let { it == "on_dm" }) {
+        else if (event.button.id.let { it == "on_dm" }) {
             liveAlertDm(event)
         }
         //解除
-        else if (event.button?.id.let { it == "clear" }) {
+        else if (event.button.id.let { it == "clear" }) {
             removeRoles(event)
         }
     }
 
-    private fun liveAlert(event: ButtonClickEvent) {
+    private fun liveAlert(event: ButtonInteractionEvent) {
         val role = event.jda.getRoleById(EnvWrapper.ALERT_ROLE)
         giveRole(event,role)
     }
 
-    private fun liveAlertDm(event: ButtonClickEvent) {
+    private fun liveAlertDm(event: ButtonInteractionEvent) {
         if (!EnvWrapper.IS_DM_ENABLED) {
             event.reply("現在DMでの通知は行っていません。").setEphemeral(true).queue()
             return
@@ -35,7 +35,7 @@ class PushButton : ListenerAdapter() {
         giveRole(event,role)
     }
 
-    private fun giveRole(event: ButtonClickEvent,role:Role?){
+    private fun giveRole(event: ButtonInteractionEvent,role:Role?){
         try {
             if (event.member!!.roles.contains(role!!)) {
                 event.reply("すでに購読しています！").setEphemeral(true).queue()
@@ -49,7 +49,7 @@ class PushButton : ListenerAdapter() {
         }
     }
 
-    private fun removeRoles(event: ButtonClickEvent) {
+    private fun removeRoles(event: ButtonInteractionEvent) {
         val code = removeRole(event, event.jda.getRoleById(EnvWrapper.ALERT_ROLE)) ||
                 if (EnvWrapper.IS_DM_ENABLED)
                     removeRole(event, event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE))
@@ -59,7 +59,7 @@ class PushButton : ListenerAdapter() {
 
     }
 
-    private fun removeRole(event: ButtonClickEvent, role: Role?): Boolean {
+    private fun removeRole(event: ButtonInteractionEvent, role: Role?): Boolean {
         try {
             if (!event.member!!.roles.contains(role))
                 return false
