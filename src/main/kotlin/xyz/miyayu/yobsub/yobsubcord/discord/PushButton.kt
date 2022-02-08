@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.pubsub.BEFORE_LIVE
-import xyz.miyayu.yobsub.yobsubcord.pubsub.NOT_STREAMING
 import xyz.miyayu.yobsub.yobsubcord.pubsub.Notification
 import xyz.miyayu.yobsub.yobsubcord.pubsub.ONE_MIN_ERROR
 
@@ -16,9 +15,9 @@ class PushButton : ListenerAdapter() {
             liveAlert((event))
         }
         //Live-Alert(DM)
-        else if (event.button.id.let { it == "on_dm" }) {
+        /**else if (event.button.id.let { it == "on_dm" }) {
             liveAlertDm(event)
-        }
+        }**/
         //解除
         else if (event.button.id.let { it == "clear" }) {
             removeRoles(event)
@@ -41,14 +40,14 @@ class PushButton : ListenerAdapter() {
         giveRole(event, role)
     }
 
-    private fun liveAlertDm(event: ButtonInteractionEvent) {
+    /**private fun liveAlertDm(event: ButtonInteractionEvent) {
         if (!EnvWrapper.IS_DM_ENABLED) {
             event.reply("現在DMでの通知は行っていません。").setEphemeral(true).queue()
             return
         }
         val role = event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE)
         giveRole(event, role)
-    }
+    }**/
 
     private fun giveRole(event: ButtonInteractionEvent, role: Role?) {
         try {
@@ -65,10 +64,10 @@ class PushButton : ListenerAdapter() {
     }
 
     private fun removeRoles(event: ButtonInteractionEvent) {
-        val code = removeRole(event, event.jda.getRoleById(EnvWrapper.ALERT_ROLE)) ||
+        val code = removeRole(event, event.jda.getRoleById(EnvWrapper.ALERT_ROLE))/** ||
                 if (EnvWrapper.IS_DM_ENABLED)
                     removeRole(event, event.jda.getRoleById(EnvWrapper.DM_ALERT_ROLE))
-                else false
+                else false**/
 
         if (!code) event.reply("正常に処理が完了しました").setEphemeral(true).queue()
 

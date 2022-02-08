@@ -37,18 +37,18 @@ fun loadEnv() {
     logger.info("DISCORDTOKEN:\t%s".format(EnvWrapper.DISCORD_TOKEN))
     logger.info("ADMINROLE:\t%s".format(EnvWrapper.ADMIN_ROLE))
     logger.info("ALERTROLE:\t%s".format(EnvWrapper.ALERT_ROLE))
-    logger.info("DMALERTROLE:\t%s".format(EnvWrapper.DM_ALERT_ROLE))
+    //logger.info("DMALERTROLE:\t%s".format(EnvWrapper.DM_ALERT_ROLE))
     logger.info("ALERTCHANNEL:\t%s".format(EnvWrapper.ALERT_CHANNEL))
     logger.info("DEBUGUSER:\t%s".format(EnvWrapper.DEBUG_USER))
     logger.info("DEBUGGUILD:\t%s".format(EnvWrapper.DEBUG_GUILD))
-    logger.info(
+    /**logger.info(
         "DM通知:\t%s".format(
             if (EnvWrapper.IS_DM_ENABLED)
                 "有効"
             else
                 "無効"
         )
-    )
+    )**/
     EnvWrapper.YTCHANNELS.forEach {
         logger.info("YTCHANNELS:\t%s".format(it))
     }
