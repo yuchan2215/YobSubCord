@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.Video
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
-import xyz.miyayu.yobsub.yobsubcord.logger
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -45,6 +44,7 @@ fun alert(video: Video) {
     } else {
         textChannel?.sendMessage(messageBuilder.build())?.queue()
     }
+    /**
     if (!EnvWrapper.IS_DM_ENABLED) return
     val dmMessage =
         if (video.videoStatus == VideoStatus.PRE_LIVE) {
@@ -61,7 +61,7 @@ fun alert(video: Video) {
     var count = 0
     val dmRole = JDAWrapper.getJDA().getRoleById(EnvWrapper.DM_ALERT_ROLE)
     //DM通知
-    textChannel?.guild?.loadMembers{
+    textChannel!!.guild.loadMembers{
         if(it.roles.contains(dmRole)) {
             count++
             it.user.openPrivateChannel().queue{ pc ->
@@ -69,7 +69,7 @@ fun alert(video: Video) {
             }
         }
     }
-    logger.info("$count 件のDMを配信しました")
+    logger.info("$count 件のDMを配信しました")**/
 
 }
 
