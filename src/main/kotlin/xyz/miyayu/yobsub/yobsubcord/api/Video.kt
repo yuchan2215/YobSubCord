@@ -75,7 +75,7 @@ fun getVideos(channelId: String):List<String>{
         val listId = channelId.replaceFirst("UC", "UU")
         //URl作成
         val url =
-            URL("https://www.googleapis.com/youtube/v3/playlistItems?key=${EnvWrapper.YT_API}&playlistId=${listId}&part=contentDetails")
+            URL("https://www.googleapis.com/youtube/v3/playlistItems?key=${EnvWrapper.YT_API}&playlistId=${listId}&part=contentDetails&maxResults=1")
         val http = url.openConnection() as HttpURLConnection
         http.requestMethod = "GET"
         http.connect()
