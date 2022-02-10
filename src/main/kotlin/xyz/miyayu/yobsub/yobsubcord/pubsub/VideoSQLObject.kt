@@ -1,9 +1,9 @@
 package xyz.miyayu.yobsub.yobsubcord.pubsub
 
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
+import xyz.miyayu.yobsub.yobsubcord.formatter
 import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 data class SQLVideo(
@@ -41,6 +41,6 @@ fun getSQLVideo(videoId: String): SQLVideo {
 }
 
 private fun toLocalDatetime(stringData: String): LocalDateTime {
-    val dtft = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+    val dtft = formatter
     return LocalDateTime.parse(stringData, dtft)
 }
