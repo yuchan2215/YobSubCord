@@ -15,6 +15,7 @@ import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
 import xyz.miyayu.yobsub.yobsubcord.api.getVideo
 import xyz.miyayu.yobsub.yobsubcord.discord.alert
+import xyz.miyayu.yobsub.yobsubcord.formatter
 import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
 import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.io.StringReader
@@ -229,6 +230,6 @@ class Notification {
     }
 
     fun toDateString(localDateTime: LocalDateTime): String {
-        return DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(localDateTime)
+        return formatter.format(localDateTime)
     }
 }
