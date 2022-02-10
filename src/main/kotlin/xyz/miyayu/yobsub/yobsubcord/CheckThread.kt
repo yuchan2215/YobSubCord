@@ -14,7 +14,7 @@ class CheckThread :Thread(){
                 dbCheck()
                 apiCheck()
             }
-        },0,1000*60)
+        },0,1000*60 + 500)
     }
     private fun dbCheck(){
         try {
