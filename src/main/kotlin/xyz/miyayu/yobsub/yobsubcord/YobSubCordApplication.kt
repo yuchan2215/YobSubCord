@@ -12,12 +12,13 @@ import xyz.miyayu.yobsub.yobsubcord.discord.commands.Eval
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.MakeButton
 import xyz.miyayu.yobsub.yobsubcord.discord.commands.Test
 import xyz.miyayu.yobsub.yobsubcord.pubsub.subscribe
+import java.time.format.DateTimeFormatter
 
 @SpringBootApplication
 class YobSubCordApplication
 
 val logger: Logger = LoggerFactory.getLogger(YobSubCordApplication::class.java)
-
+val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 //バージョン
 val VERSION: String = (YobSubCordApplication::class.java.`package`.implementationVersion ?: "Dev,Dev").split(",")[0]
 val GITTAG: String = (YobSubCordApplication::class.java.`package`.implementationVersion ?: "Dev,Dev").split(",")[1]
@@ -26,12 +27,21 @@ fun main(args: Array<String>) {
     runApplication<YobSubCordApplication>(*args)
     loadEnv()
     loadDiscord()
+    sqlitePatch()
     subscribe()
     //SQLite初期化
     createTables()
     CheckThread().start()
-}
 
+}
+private val regex = Regex(pattern = "[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")
+fun sqlitePatch(){
+    listOf("lastLook","liveStartDate").forEach{
+        getSQLConnection().use{con ->
+            con.createStatement().executeUpdate("UPDATE videos SET $it=REPLACE($it,'/','-')")
+        }
+    }
+}
 fun loadEnv() {
     logger.info("環境変数を読み込みます...")
     logger.info("DISCORDTOKEN:\t%s".format(EnvWrapper.DISCORD_TOKEN))

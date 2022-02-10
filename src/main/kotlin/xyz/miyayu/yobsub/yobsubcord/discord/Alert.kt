@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.Video
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
+import xyz.miyayu.yobsub.yobsubcord.formatter
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -77,7 +78,7 @@ fun toJapanTimeString(localDateTime: LocalDateTime): String {
     val utcOffsetDateTime = localDateTime.atZone(ZoneOffset.UTC)
     val jstOffsetDateTime = utcOffsetDateTime.withZoneSameInstant(ZoneId.of("Asia/Tokyo"))
     val jstLocalDateTime = jstOffsetDateTime.toLocalDateTime()
-    return jstLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))
+    return jstLocalDateTime.format(formatter)
 }
 
 fun getURL(videoId: String): String {

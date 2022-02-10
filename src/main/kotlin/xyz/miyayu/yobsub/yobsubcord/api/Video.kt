@@ -70,3 +70,27 @@ fun getVideo(videoId: String): Video {
         throw ex
     }
 }
+fun getVideos(channelId: String):List<String>{
+    try {
+        val listId = channelId.replaceFirst("UC", "UU")
+        //URl作成
+        val url =
+            URL("https://www.googleapis.com/youtube/v3/playlistItems?key=${EnvWrapper.YT_API}&playlistId=${listId}&part=contentDetails&maxResults=1")
+        val http = url.openConnection() as HttpURLConnection
+        http.requestMethod = "GET"
+        http.connect()
+
+        //結果の処理
+        val reader = BufferedReader(InputStreamReader(http.inputStream))
+        val result = reader.readText()
+        val jsonObj = JSONObject(result)
+        val tempList = mutableListOf<String>()
+        jsonObj.getJSONArray("items").toList().forEach {
+            val item = it as HashMap<*, *>
+            tempList.add((item["contentDetails"] as HashMap<*,*>)["videoId"] as String)
+        }
+        return tempList
+    }catch(e:Exception){
+        throw e
+    }
+}

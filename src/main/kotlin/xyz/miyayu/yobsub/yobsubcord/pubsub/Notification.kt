@@ -15,6 +15,7 @@ import xyz.miyayu.yobsub.yobsubcord.EnvWrapper
 import xyz.miyayu.yobsub.yobsubcord.api.VideoStatus
 import xyz.miyayu.yobsub.yobsubcord.api.getVideo
 import xyz.miyayu.yobsub.yobsubcord.discord.alert
+import xyz.miyayu.yobsub.yobsubcord.formatter
 import xyz.miyayu.yobsub.yobsubcord.getChildNodeMaps
 import xyz.miyayu.yobsub.yobsubcord.getSQLConnection
 import java.io.StringReader
@@ -178,12 +179,7 @@ class Notification {
             }
         }
 
-        //差分(分を取得)
-        val diff = getDiff(videoTime, nowLocalDateTime)
-        //24時間以上差が空いているならエラーを返す
-        if (60 * 24 < diff) {
-            throw Exception("24 hour Error!! + $diff")
-        }
+
 
         //データベースに追加する
         getSQLConnection().use {
@@ -201,7 +197,13 @@ class Notification {
             }
             pstmt.executeUpdate()
         }
-
+        
+        //差分(分を取得)
+        val diff = getDiff(videoTime, nowLocalDateTime)
+        //24時間以上差が空いているなら一応追加してエラーを返す
+        if (60 * 24 < diff) {
+            throw Exception("24 hour Error!! + $diff")
+        }
         alert(video)
 
 
@@ -228,6 +230,6 @@ class Notification {
     }
 
     fun toDateString(localDateTime: LocalDateTime): String {
-        return DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(localDateTime)
+        return formatter.format(localDateTime)
     }
 }
