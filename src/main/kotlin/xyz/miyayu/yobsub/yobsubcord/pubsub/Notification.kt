@@ -178,12 +178,7 @@ class Notification {
             }
         }
 
-        //差分(分を取得)
-        val diff = getDiff(videoTime, nowLocalDateTime)
-        //24時間以上差が空いているならエラーを返す
-        if (60 * 24 < diff) {
-            throw Exception("24 hour Error!! + $diff")
-        }
+
 
         //データベースに追加する
         getSQLConnection().use {
@@ -201,7 +196,13 @@ class Notification {
             }
             pstmt.executeUpdate()
         }
-
+        
+        //差分(分を取得)
+        val diff = getDiff(videoTime, nowLocalDateTime)
+        //24時間以上差が空いているなら一応追加してエラーを返す
+        if (60 * 24 < diff) {
+            throw Exception("24 hour Error!! + $diff")
+        }
         alert(video)
 
 
