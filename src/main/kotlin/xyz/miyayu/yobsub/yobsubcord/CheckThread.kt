@@ -2,6 +2,7 @@ package xyz.miyayu.yobsub.yobsubcord
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.miyayu.yobsub.yobsubcord.api.getVideos
 import xyz.miyayu.yobsub.yobsubcord.pubsub.Notification
 import java.util.*
 
@@ -11,6 +12,7 @@ class CheckThread :Thread(){
         Timer().schedule(object: TimerTask(){
             override fun run() {
                 dbCheck()
+                apiCheck()
             }
         },0,1000*60)
     }
@@ -35,5 +37,20 @@ class CheckThread :Thread(){
             logger.error(e.stackTraceToString())
         }
 
+    }
+    private fun apiCheck(){
+        var checks = 0
+        var errors = 0
+        EnvWrapper.YTCHANNELS.forEach{
+            getVideos(it).forEach{ videoid ->
+                checks ++
+                try {
+                    Notification().onPost(videoid)
+                }catch(_:Exception){
+                    errors++
+                }
+            }
+        }
+        logger.info("$checks 件のデータを確認しました")
     }
 }
