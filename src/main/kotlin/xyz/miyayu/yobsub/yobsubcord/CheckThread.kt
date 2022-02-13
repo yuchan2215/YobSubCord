@@ -39,18 +39,22 @@ class CheckThread :Thread(){
 
     }
     private fun apiCheck(){
-        var checks = 0
-        var errors = 0
-        EnvWrapper.YTCHANNELS.forEach{
-            getVideos(it).forEach{ videoid ->
-                checks ++
-                try {
-                    Notification().onPost(videoid)
-                }catch(_:Exception){
-                    errors++
+        try {
+            var checks = 0
+            var errors = 0
+            EnvWrapper.YTCHANNELS.forEach {
+                getVideos(it).forEach { videoid ->
+                    checks++
+                    try {
+                        Notification().onPost(videoid)
+                    } catch (_: Exception) {
+                        errors++
+                    }
                 }
             }
+            logger.info("$checks 件のデータを確認しました")
+        }catch(e:Exception){
+            logger.error(e.stackTraceToString())
         }
-        logger.info("$checks 件のデータを確認しました")
     }
 }
