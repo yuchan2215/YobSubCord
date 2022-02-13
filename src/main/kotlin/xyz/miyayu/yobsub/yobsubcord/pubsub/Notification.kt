@@ -67,6 +67,7 @@ class Notification {
                 val ref = (deletedEntry as Element).getAttribute("ref")
                 val videoId = ref.split(":")[2]
                 notificationLogger.info("removed: $videoId")
+                onPost(videoId)
 
 
             }
