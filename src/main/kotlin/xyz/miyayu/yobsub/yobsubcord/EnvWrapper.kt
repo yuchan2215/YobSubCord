@@ -8,6 +8,9 @@ class EnvWrapper {
         private val DOTENV: Dotenv = dotenv {
             ignoreIfMissing = true
         }
+        val MENTION_LIVE: Boolean = DOTENV.get("MENTION_LIVE","").equals("true",true)
+        val MENTION_MOVIE: Boolean = DOTENV.get("MENTION_MOVIE","").equals("true",true)
+
         val DISCORD_TOKEN: String = DOTENV.get("DISCORDTOKEN", "")
         val ADMIN_ROLE: String = DOTENV.get("ADMINROLE", "")
         val ALERT_ROLE: String = DOTENV.get("ALERTROLE", "")
