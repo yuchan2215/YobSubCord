@@ -12,23 +12,47 @@ import xyz.miyayu.yobsub.yobsubcord.formatter
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 
 fun alert(video: Video) {
     val message: String =
-        if (video.videoStatus == VideoStatus.PRE_LIVE) {
-            video.videoStatus.notificationText.format(
+        when (video.videoStatus) {
+            VideoStatus.PRE_LIVE -> video.videoStatus.notificationText.format(
                 toJapanTimeString(video.scheduledTime!!),
                 video.videoTitle,
                 getURL(video.videoId)
             )
-        } else {
-            video.videoStatus.notificationText.format(
-                EnvWrapper.ALERT_ROLE,
-                video.videoTitle,
-                getURL(video.videoId)
-            )
+            VideoStatus.NOW_LIVE -> {
+                val mention = EnvWrapper.MENTION_LIVE
+                if (mention) {
+                    video.videoStatus.notificationText.format(
+                        EnvWrapper.ALERT_ROLE,
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                } else {
+                    video.videoStatus.noMentionText.format(
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                }
+            }
+            VideoStatus.VIDEO -> {
+                val mention = EnvWrapper.MENTION_MOVIE
+                if (mention) {
+                    video.videoStatus.notificationText.format(
+                        EnvWrapper.ALERT_ROLE,
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                } else {
+                    video.videoStatus.noMentionText.format(
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                }
+            }
+            else -> ""
         }
     val channelType = JDAWrapper.getJDA().getGuildChannelById(EnvWrapper.ALERT_CHANNEL)?.type
     val textChannel = JDAWrapper.getJDA().getTextChannelById(EnvWrapper.ALERT_CHANNEL)
@@ -45,33 +69,6 @@ fun alert(video: Video) {
     } else {
         textChannel?.sendMessage(messageBuilder.build())?.queue()
     }
-    /**
-    if (!EnvWrapper.IS_DM_ENABLED) return
-    val dmMessage =
-        if (video.videoStatus == VideoStatus.PRE_LIVE) {
-            video.videoStatus.dmText.format(
-                toJapanTimeString(video.scheduledTime!!),
-                getURL(video.videoId)
-            )
-        } else {
-            video.videoStatus.dmText.format(
-                getURL(video.videoId)
-            )
-        }
-
-    var count = 0
-    val dmRole = JDAWrapper.getJDA().getRoleById(EnvWrapper.DM_ALERT_ROLE)
-    //DM通知
-    textChannel!!.guild.loadMembers{
-        if(it.roles.contains(dmRole)) {
-            count++
-            it.user.openPrivateChannel().queue{ pc ->
-                pc.sendMessage(dmMessage).queue()
-            }
-        }
-    }
-    logger.info("$count 件のDMを配信しました")**/
-
 }
 
 fun toJapanTimeString(localDateTime: LocalDateTime): String {

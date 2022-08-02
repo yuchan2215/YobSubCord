@@ -17,13 +17,8 @@ class MakeButton : ListenerAdapter() {
         //ボタンの定義
         val component = mutableListOf(
             Button.primary("on_mention", "\uD83D\uDCACメンション通知ON"),
-            Button.success("on_dm", "\uD83D\uDCEBDM通知ON"),
             Button.danger("clear", "通知解除")
         )
-
-        //DMが無効ならボタンを削除
-        if (!EnvWrapper.IS_DM_ENABLED)
-            component.removeAt(1)
 
         //メッセージを送信
         event.channel.sendMessage("Live通知を受け取るかどうか、このボタンで設定できます！")
