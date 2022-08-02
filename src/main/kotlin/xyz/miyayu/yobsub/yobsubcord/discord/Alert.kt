@@ -45,33 +45,6 @@ fun alert(video: Video) {
     } else {
         textChannel?.sendMessage(messageBuilder.build())?.queue()
     }
-    /**
-    if (!EnvWrapper.IS_DM_ENABLED) return
-    val dmMessage =
-        if (video.videoStatus == VideoStatus.PRE_LIVE) {
-            video.videoStatus.dmText.format(
-                toJapanTimeString(video.scheduledTime!!),
-                getURL(video.videoId)
-            )
-        } else {
-            video.videoStatus.dmText.format(
-                getURL(video.videoId)
-            )
-        }
-
-    var count = 0
-    val dmRole = JDAWrapper.getJDA().getRoleById(EnvWrapper.DM_ALERT_ROLE)
-    //DM通知
-    textChannel!!.guild.loadMembers{
-        if(it.roles.contains(dmRole)) {
-            count++
-            it.user.openPrivateChannel().queue{ pc ->
-                pc.sendMessage(dmMessage).queue()
-            }
-        }
-    }
-    logger.info("$count 件のDMを配信しました")**/
-
 }
 
 fun toJapanTimeString(localDateTime: LocalDateTime): String {
