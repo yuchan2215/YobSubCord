@@ -12,19 +12,17 @@ import xyz.miyayu.yobsub.yobsubcord.formatter
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 
 fun alert(video: Video) {
     val message: String =
-        if (video.videoStatus == VideoStatus.PRE_LIVE) {
-            video.videoStatus.notificationText.format(
+        when (video.videoStatus) {
+            VideoStatus.PRE_LIVE -> video.videoStatus.notificationText.format(
                 toJapanTimeString(video.scheduledTime!!),
                 video.videoTitle,
                 getURL(video.videoId)
             )
-        } else {
-            video.videoStatus.notificationText.format(
+            else -> video.videoStatus.notificationText.format(
                 EnvWrapper.ALERT_ROLE,
                 video.videoTitle,
                 getURL(video.videoId)
