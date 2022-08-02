@@ -22,11 +22,37 @@ fun alert(video: Video) {
                 video.videoTitle,
                 getURL(video.videoId)
             )
-            else -> video.videoStatus.notificationText.format(
-                EnvWrapper.ALERT_ROLE,
-                video.videoTitle,
-                getURL(video.videoId)
-            )
+            VideoStatus.NOW_LIVE -> {
+                val mention = EnvWrapper.MENTION_LIVE
+                if (mention) {
+                    video.videoStatus.notificationText.format(
+                        EnvWrapper.ALERT_ROLE,
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                } else {
+                    video.videoStatus.noMentionText.format(
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                }
+            }
+            VideoStatus.VIDEO -> {
+                val mention = EnvWrapper.MENTION_MOVIE
+                if (mention) {
+                    video.videoStatus.notificationText.format(
+                        EnvWrapper.ALERT_ROLE,
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                } else {
+                    video.videoStatus.noMentionText.format(
+                        video.videoTitle,
+                        getURL(video.videoId)
+                    )
+                }
+            }
+            else -> ""
         }
     val channelType = JDAWrapper.getJDA().getGuildChannelById(EnvWrapper.ALERT_CHANNEL)?.type
     val textChannel = JDAWrapper.getJDA().getTextChannelById(EnvWrapper.ALERT_CHANNEL)
