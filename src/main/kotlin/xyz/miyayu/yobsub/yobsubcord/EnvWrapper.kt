@@ -32,5 +32,19 @@ class EnvWrapper {
 
         val URL: String = DOTENV.get("URL", "")
         val YT_API: String = DOTENV.get("YTAPI", "")
+
+        fun print(){
+            println("MENTION_LIVE:\t$MENTION_LIVE")
+            println("MENTION_MOVIE:\t$MENTION_MOVIE")
+            println("DISCORD_TOKEN:\t$DISCORD_TOKEN")
+            println("ADMIN_ROLE:\t$ADMIN_ROLE")
+            println("ALERT_ROLE:\t$ALERT_ROLE")
+            println("ALERT_CHANNEL:\t$ALERT_CHANNEL")
+            println("DEBUG_USER:\t$DEBUG_USER")
+            println("DEBUG_GUILD:\t$DEBUG_GUILD")
+            println("YT_CHANNELS:\t${YTCHANNELS.joinToString(",")}")
+            println("URL:\t$URL")
+            println("YT_API:\t$YT_API")
+        }
     }
 }
